@@ -21,7 +21,7 @@ let loadedData = false;
 let canCorrect = true;
 
 async function loadLevel(password) {
-    const url = window.location.protocol + '//' + window.location.host + '/submit';
+    const url = window.location.protocol + '//' + window.location.host + '/api/submit';
     const data = {
         level: currentLevel,
         password: password

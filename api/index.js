@@ -1,13 +1,13 @@
 // TODO: Add level 5, 6, 7, 8, 9 and 10 <-- I think its done
 
 const express = require('express');
-const { redirect } = require('express/lib/response');
 const path = require('path');
-const app = express();
+const serverless = require('serverless-http');
 const port = 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+const app = express();
 
+app.use(express.static(path.join(__dirname, '../public'))); // adjust path
 app.use(express.json());
 
 function sendLevel1(){
@@ -231,6 +231,5 @@ app.post('/submit', (req, res) => {
 	}
 });
 
-const server = app.listen(port, () => {
-	console.log(`Server running on http://localhost:${port}`);
-});
+module.exports = app;
+module.exports.handler = serverless(app);
