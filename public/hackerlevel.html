@@ -19,6 +19,21 @@
 let firstLoad = true;
 let loadedData = false;
 let canCorrect = true;
+let loadedSomeReturns = false;
+
+function appendMeSomeReturns(){
+    loadedSomeReturns = true;
+    const gameDiv = document.getElementById('flex-item');
+    const p = document.createElement('p');
+    p.innerHTML = `
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick='localStorage.clear();window.location.reload();' id="return-button" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Clear some cookies</button>
+    </div>
+    `;
+    p.style.textAlign = 'center';
+    gameDiv.appendChild(p);
+
+}
 
 function loadSomeDevs(){
     console.log("Loading some devs...");
@@ -163,6 +178,12 @@ if(currentLevel == 0) {
     loadedData = true;
     canCorrect = false;
 }
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Alt' && !loadedSomeReturns) {
+        appendMeSomeReturns();
+    }
+});
 </script>
 <script src="/assets/js/hacker-share.js"></script>
 
