@@ -20,6 +20,39 @@ let firstLoad = true;
 let loadedData = false;
 let canCorrect = true;
 
+function loadSomeDevs(){
+    console.log("Loading some devs...");
+    const gameDiv = document.getElementById('flex-item');
+    const img = document.createElement('img');
+    const p = document.createElement('p');
+    p.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span style="flex:1; text-align:left;">
+                Josh Hughes<br>
+                <small>playtested the game!</small>
+            </span>
+            <span style="flex:1; text-align:center;">
+                Phillip McHale<br>
+                <small>created the powerpoints</small>
+            </span>
+            <span style="flex:1; text-align:right;">
+                Bailey Miles<br>
+                <small>created this awesome site!</small>
+            </span>
+        </div>
+    `;
+    p.style.textAlign = 'center';
+    gameDiv.appendChild(p);
+    img.src = '/assets/images/dev.png';
+    img.alt = 'Developers';
+    img.style.width = '90%';
+    img.style.height = '400px';
+    img.style.display = 'block';
+    img.style.margin = '0 auto';
+    img.style.borderRadius = '10px';
+    gameDiv.appendChild(img);
+}
+
 async function loadLevel(password) {
     const url = window.location.protocol + '//' + window.location.host + '/submit';
     const data = {

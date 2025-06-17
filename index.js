@@ -218,7 +218,7 @@ app.post('/submit', (req, res) => {
 			}
 		case 10:
 			if (password === 'easy') {
-				return res.json({ level: '11', content: `<div id="flex-item"><h1>Congratulations!</h1><p>You have completed the game!</p></div>` });
+				return res.json({ level: '11', js: "loadSomeDevs()", content: `<div id="flex-item"><h1>Congratulations!</h1><p>You have completed the game!</p></div>` });
 			} else {
 				if(password === 'IWinTheGame!') {
 					return res.json({ error: true, js: `alert('You have been fooled! THAT ISNT THE PASSWORD!')` });
