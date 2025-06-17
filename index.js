@@ -32,6 +32,7 @@ function sendLevel2(){
 		<div id="flex-item">
 			<p>Some websites can be hacked using the "devtools", which you can access using the right-click and "inspect element" or by clicking ctrl+shift+i!</p>
 			<p>In this case the password hidden here is in the "hacker-game" tag where the password awaits you!</p>
+			<p>If you are a little lazy like me you may want to right click the password and click "Edit HTML" so that you can copy and paste the password!</p>
 		</div>
 		`;
 }
@@ -114,6 +115,7 @@ function sendLevel8(){
             <div id="submit" tabindex="0">Submit</div><br>
 			<p>01000000 11000010 10100011 01100100 00101001 01010110 01001110 01011100 00111001 00101101 00110001 01001000 00110010</p>
 			<p id="hint" style="color: transparent;">This is called binary and can be translated into actual text</p>
+			<p>You can use online tools like <a style="color: salmon;" target=_blank href="https://www.rapidtables.com/convert/number/binary-to-ascii.html">binary converters</a> to change the binary to text!</p>
         </div>`,``]
 }
 
@@ -184,7 +186,12 @@ app.post('/submit', (req, res) => {
 		case 5:
 			if (password === 'vwKPydUFJMzF') {
 				return res.json({ level: '6', content: sendLevel6()[0] });
-			} else {
+			} else if (password === 'kX8[5L3iGS)`'){ //Dont know why this happens but this is a fix for it.
+				const data = sendLevel5();
+				const htmlData = data[0];
+				return res.json({ level: '5', content: htmlData });
+			}
+			else {
 				return res.json({ error: true, content: `Password is incorrect!`, redirect: { url: "/hackerlevel.html?password=vwKPydUFJMzF", delay: 500 } });
 
 			}
