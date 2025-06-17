@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard with Flip Animation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+        }
+
+        .return-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+
+        .return-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .flashcard-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .card-wrapper {
+            perspective: 1000px;
+            width: 400px;
+            height: 250px;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            transform: rotateY(180deg);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-counter {
+            font-size: 18px;
+            color: white;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="return-btn">← Return to home</a>
+    
+    <div class="flashcard-container">
+        <div class="question-counter">
+            Question <span id="current-question">1</span> of <span id="total-questions">5</span>
+        </div>
+        
+        <div class="card-wrapper">
+            <div class="card" id="flashcard">
+                <div class="card-face card-front">
+                    <div id="question-text">What is the capital of France?</div>
+                </div>
+                <div class="card-face card-back">
+                    <div id="answer-text">Paris</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button class="btn btn-secondary" id="prev-btn">Previous</button>
+            <button class="btn btn-primary" id="next-btn">Next</button>
+        </div>
+    </div>
+
+    <script>
+const flashcards = [
+    {
+        q: "What are the three main types of hackers?",
+        a: "Black hat, white hat, and grey hat hackers."
+    },
+    {
+        q: "What is the purpose of a penetration test?",
+        a: "To identify vulnerabilities in a system before they can be exploited by malicious hackers."
+    },
+    {
+        q: "What is social engineering?",
+        a: "A technique used to manipulate individuals into divulging confidential information."
+    },
+    {
+        q: "What is the difference between symmetric and asymmetric encryption?",
+        a: "Symmetric encryption uses the same key for both encryption and decryption, while asymmetric encryption uses a pair of keys (public and private)."
+    },
+    {
+        q: "What is SQL injection?",
+        a: "A code injection technique that exploits vulnerabilities in an application's software by inserting malicious SQL statements."
+    },
+    {
+        q: "What is phishing?",
+        a: "A method of trying to gather personal information using deceptive emails and websites."
+    },
+    {
+        q: "What is a DDoS attack?",
+        a: "A Distributed Denial of Service attack aims to make a machine or network resource unavailable to its intended users by overwhelming it with traffic."
+    },
+    {
+        q: "What is the purpose of firewalls in cybersecurity?",
+        a: "To monitor and control incoming and outgoing network traffic based on predetermined security rules."
+    },
+    {
+        q: "What is malware?",
+        a: "Malicious software designed to harm, exploit, or otherwise compromise a computer system."
+    },
+    {
+        q: "What is the principle of least privilege?",
+        a: "A security principle that states users should have the minimum level of access necessary to perform their job functions."
+    },
+    {
+        q: "What is a zero-day exploit?",
+        a: "A vulnerability that is unknown to the vendor and has not been patched, making it particularly dangerous."
+    },
+    {
+        q: "What is two-factor authentication?",
+        a: "A security process in which the user provides two different authentication factors to verify themselves."
+    },
+    {
+        q: "What is a VPN?",
+        a: "A Virtual Private Network that creates a secure connection over the internet, allowing users to send and receive data as if they were directly connected to a private network."
+    },
+    {
+        q: "What is the purpose of an intrusion detection system (IDS)?",
+        a: "To monitor network traffic for suspicious activity and alert administrators of potential security breaches."
+    },
+    {
+        q: "What is ransomware?",
+        a: "A type of malware that encrypts files on a victim's computer and demands payment for the decryption key."
+    },
+    {
+        q: "What is a digital signature?",
+        a: "A cryptographic technique used to validate the authenticity and integrity of a message, software, or digital document."
+    },
+    {
+        q: "What is the role of a security analyst?",
+        a: "To monitor, prevent, and respond to security incidents and threats within an organization."
+    },
+    {
+        q: "What is the difference between a virus and a worm?",
+        a: "A virus attaches itself to a host file and requires user action to spread, while a worm is self-replicating and can spread without user intervention."
+    },
+    {
+        q: "What is ethical hacking?",
+        a: "The practice of intentionally probing systems for vulnerabilities with the permission of the owner to improve security."
+    },
+    {
+        q: "What is the CIA triad in cybersecurity?",
+        a: "Confidentiality, Integrity, and Availability - the three core principles of information security."
+    },
+    {
+        q: "What is a security policy?",
+        a: "A formal set of rules and guidelines that dictate how an organization manages and protects its information assets."
+    },
+    {
+        q: "What is the purpose of security awareness training?",
+        a: "To educate employees about security risks and best practices to help prevent security breaches."
+    },
+    {
+        q: "What is a botnet?",
+        a: "A network of compromised computers that are controlled by a hacker to perform automated tasks, often used in DDoS attacks."
+    },
+    {
+        q: "What is the role of encryption in cybersecurity?",
+        a: "To protect data by converting it into a format that cannot be easily read without the appropriate decryption key."
+    },
+    {
+        q: "What is a security breach?",
+        a: "An incident where unauthorized access to data or systems occurs, potentially leading to data loss or compromise."
+    },
+    {
+        q: "What is the purpose of a security audit?",
+        a: "To evaluate an organization's security policies, procedures, and controls to ensure they are effective and compliant with regulations."
+    },
+    {
+        q: "What is a honeypot in cybersecurity?",
+        a: "A decoy system designed to attract and trap potential attackers, allowing security professionals to study their methods."
+    },
+    {
+        q: "What is the difference between a threat and a vulnerability?",
+        a: "A threat is a potential danger that could exploit a vulnerability, while a vulnerability is a weakness in a system that can be exploited."
+    },
+    {
+        q: "What is the purpose of patch management?",
+        a: "To keep software up-to-date with the latest security patches to protect against known vulnerabilities."
+    }
+]
+
+        let currentIndex = 0;
+        let isFlipped = false;
+
+        const card = document.getElementById('flashcard');
+        const questionText = document.getElementById('question-text');
+        const answerText = document.getElementById('answer-text');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const currentQuestionSpan = document.getElementById('current-question');
+        const totalQuestionsSpan = document.getElementById('total-questions');
+
+        function init() {
+            totalQuestionsSpan.textContent = flashcards.length;
+            updateCard();
+            updateButtons();
+        }
+
+        function updateCard() {
+            questionText.textContent = flashcards[currentIndex].q;
+            answerText.textContent = flashcards[currentIndex].a;
+            currentQuestionSpan.textContent = currentIndex + 1;
+        }
+
+        function updateButtons() {
+            prevBtn.disabled = currentIndex === 0;
+            nextBtn.disabled = currentIndex === flashcards.length - 1;
+            
+            prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
+            nextBtn.style.opacity = currentIndex === flashcards.length - 1 ? '0.5' : '1';
+        }
+
+        function flipCard() {
+            card.classList.toggle('flipped');
+            isFlipped = !isFlipped;
+        }
+
+        function resetCardToFront() {
+            if (isFlipped) {
+                card.classList.remove('flipped');
+                isFlipped = false;
+            }
+        }
+
+        function nextQuestion() {
+            if (currentIndex < flashcards.length - 1) {
+                resetCardToFront();
+                
+                setTimeout(() => {
+                    currentIndex++;
+                    updateCard();
+                    updateButtons();
+                }, 300);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                resetCardToFront();
+                
+                setTimeout(() => {
+                    currentIndex--;
+                    updateCard();
+                    updateButtons();
+                }, 300);
+            }
+        }
+
+        card.addEventListener('click', flipCard);
+        nextBtn.addEventListener('click', nextQuestion);
+        prevBtn.addEventListener('click', prevQuestion);
+
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case ' ':
+                case 'Enter':
+                    e.preventDefault();
+                    flipCard();
+                    break;
+                case 'ArrowRight':
+                case 'n':
+                    e.preventDefault();
+                    nextQuestion();
+                    break;
+                case 'ArrowLeft':
+                case 'p':
+                    e.preventDefault();
+                    prevQuestion();
+                    break;
+            }
+        });
+
+        init();
+    </script>
+</body>
+</html>

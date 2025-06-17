@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/hacker.css">
+    <title>Hacker game</title>
+</head>
+
+<body>
+    <canvas id="matrix-canvas"></canvas>
+    <div id="notification-container"></div>
+    <div id="hacker-game">
+    </div>
+</body>
+<script src="/assets/js/hackerlevel.js"></script>
+<script>
+let firstLoad = true;
+let loadedData = false;
+let canCorrect = true;
+
+async function loadLevel(password) {
+    const url = 'http://' + window.location.host + '/submit';
+    const data = {
+        level: currentLevel,
+        password: password
+    }
+
+    console.log("send", currentLevel, password);
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+
+        if(responseData.error == "true" || responseData.error == true) {
+            showNotification(responseData.content, 'error');
+            console.log("error")
+            if(responseData.js){
+                eval(responseData.js);
+            }
+            if(responseData.redirect){
+                window.location.href = responseData.redirect.url;
+            }
+            return;
+        }
+
+        localStorage.setItem('currentLevel', currentLevel);
+        localStorage.setItem('storedPassword', password);
+
+        currentLevel = parseInt(responseData.level, 10);
+
+        if(currentLevel !== 5){ //Clear up level 5 URL
+            if(window.location.href.includes("?password=")){
+                window.location.href = "/hackerlevel.html";
+            }
+        }
+
+        const htmldata = responseData.content;
+        const flexContainer = document.getElementById('hacker-game');
+        flexContainer.innerHTML = htmldata;
+
+        if(firstLoad) {
+            firstLoad = false;
+            showNotification("Welcome to the Hacker Game!", 'success');
+        }else{
+            if(canCorrect){
+                showNotification("Password accepted!", 'success');
+            }
+        }
+        
+        if(loadedData) {
+            loadedData = false;
+            if(!window.location.href.includes("?password=")){
+                showNotification("Loaded saved level!", 'info');
+            }
+            
+        }
+
+        if(responseData.js){
+            eval(responseData.js);
+        }
+
+        if(!canCorrect) {
+            canCorrect = true;
+        }
+
+        document.getElementById('submit').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password-input').value.trim();
+
+            loadLevel(passwordInput);
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                const passwordInput = document.getElementById('password-input').value.trim();
+                loadLevel(passwordInput);
+            }
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if(currentLevel !== 5 && urlParams.has('password')){
+            window.location.href = "/hackerlevel.html";
+        }
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
+}
+
+let currentLevel = parseInt(localStorage.getItem('currentLevel'), 10) || 0;
+let storedPassword = localStorage.getItem('storedPassword') || '';
+
+if(currentLevel == 0) {
+    loadLevel('password');
+}else{
+    loadLevel(storedPassword);
+    firstLoad = false;
+    loadedData = true;
+    canCorrect = false;
+}
+</script>
+<script src="/assets/js/hacker-share.js"></script>
+
+</html>
