@@ -4,7 +4,7 @@ const express = require('express');
 const { redirect } = require('express/lib/response');
 const path = require('path');
 const app = express();
-const port = 3000;
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -230,6 +230,8 @@ app.post('/submit', (req, res) => {
 			return res.json({ error: true, content: `Invalid level!` });
 	}
 });
+
+const port = process.env.PORT || 3000;
 
 const server = app.listen(port, () => {
 	console.log(`Server running on http://localhost:${port}`);
