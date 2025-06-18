@@ -4,8 +4,258 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hacker quest</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #232526 0%, #414345 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            color: #e0e0e0;
+        }
+
+        .hud {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(30, 30, 30, 0.85);
+            border: 2px solid #00ff99;
+            border-radius: 12px;
+            padding: 16px 32px;
+            box-shadow: 0 0 16px #00ff99aa;
+            display: flex;
+            gap: 32px;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .hud .hp-bar {
+            background: #222;
+            border: 1px solid #00ff99;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 120px;
+            height: 18px;
+            margin-left: 8px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .hud .hp-bar-inner {
+            background: linear-gradient(90deg, #ff0055 0%, #ffcc00 100%);
+            height: 100%;
+            width: 80%; /* Example HP */
+            transition: width 0.4s;
+        }
+
+        .container {
+            background: rgba(20, 20, 20, 0.95);
+            border: 2px solid #00ff99;
+            border-radius: 18px;
+            box-shadow: 0 0 32px #00ff9944;
+            padding: 48px 36px 36px 36px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 350px;
+            max-width: 90vw;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 32px;
+            text-align: center;
+            text-shadow: 0 0 8px #00ff99cc;
+            letter-spacing: 1.5px;
+        }
+
+        .choices {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 12px;
+        }
+
+        .choices button {
+            background: #232526;
+            color: #00ff99;
+            border: 2px solid #00ff99;
+            border-radius: 8px;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            cursor: pointer;
+            box-shadow: 0 0 8px #00ff9955;
+            transition: background 0.2s, color 0.2s, transform 0.1s;
+        }
+
+        .choices button:hover {
+            background: #00ff99;
+            color: #232526;
+            transform: scale(1.07);
+            box-shadow: 0 0 16px #00ff99cc;
+        }
+
+        .footer {
+            margin-top: 18px;
+            font-size: 0.95rem;
+            color: #888;
+            text-align: center;
+            opacity: 0.7;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="hud">
+        <span>HP:</span>
+        <div class="hp-bar">
+            <div class="hp-bar-inner"></div>
+        </div>
+        <span>Level: 1</span>
+        <span>Score: 0</span>
+    </div>
+    <div class="container">
+        <div class="question">What is a white hat hacker?</div>
+        <div class="choices">
+            <button id="choice1" onclick="checkAnswer('choice1');">An ethical hacker!</button>
+            <button id="choice2" onclick="checkAnswer('choice2');">An unethical hacker!</button>
+            <button id="choice3" onclick="checkAnswer('choice3');">A ethically murky hacker!</button>
+        </div>
+        <div class="footer">
+            <span>HACKERMAN MODE: ON</span>
+        </div>
+    </div>
 </body>
+<script>
+const backgroundMusic = {
+    "danTDM": new Audio('assets/sounds/DanTDM - spacedog - DanTDM.mp3'),
+}
+
+const correctSounds = {
+    "correct1": new Audio('assets/sounds/darth_vader_correct.mp3'),
+    "correct2": new Audio('assets/sounds/duolingo-correct.mp3'),
+    "correct3": new Audio('assets/sounds/plankton-correct.mp3'),
+}
+
+function playBackgroundMusic(){
+    const length = Object.keys(backgroundMusic).length;
+    const randomIndex = Math.floor(Math.random() * length);
+    const musicKey = Object.keys(backgroundMusic)[randomIndex];
+    const music = backgroundMusic[musicKey];
+    music.loop = false;
+    music.volume = 0.5;
+    music.play()
+    music.addEventListener('ended', function() {
+        music.remove();
+        playBackgroundMusic(); // Will this cause recursion error?
+    });
+}
+
+function updateHPBar(percentage) {
+    const hpBarInner = document.querySelector('.hp-bar-inner');
+    hpBarInner.style.width = percentage + '%';
+}
+
+function updateScore(newScore){
+    const scoreElement = document.querySelector('.hud span:nth-child(4)');
+    scoreElement.textContent = 'Score: ' + newScore;
+}
+
+function updateLevel(newLevel) {
+    const levelElement = document.querySelector('.hud span:nth-child(3)');
+    levelElement.textContent = 'Level: ' + newLevel;
+}
+
+function handleChoice(choice){
+    if(choice == "correct!"){
+        score += 10;
+        updateScore(score);
+        const randomIndex = Math.floor(Math.random() * Object.keys(correctSounds).length);
+        const soundKey = Object.keys(correctSounds)[randomIndex];
+        const correctSound = correctSounds[soundKey];
+        correctSound.play();
+        correctSound.addEventListener('ended', function() {
+            correctSound.remove();
+        });
+        level += 1;
+        updateLevel(level);
+    } else {
+        const steveHurt = new Audio('assets/sounds/steve_hurt.mp3');
+        steveHurt.play();
+        steveHurt.addEventListener('ended', function() {
+            steveHurt.remove();
+        });
+        hp -= 20;
+        if (hp < 0){
+            hp = 0;
+            const gameOver = new Audio('assets/sounds/death.mp3');
+            gameOver.play();
+            gameOver.addEventListener('ended', function() {
+                gameOver.remove();
+            });
+        } 
+        updateHPBar(hp);
+    }
+}
+
+function checkAnswer(choiceId){
+    const url = window.location.protocol + '//' + window.location.host + '/api/question';
+    const questionText = document.querySelector('.question').textContent;
+    const answerText = document.getElementById(choiceId).textContent;
+    const data = {
+        question: questionText,
+        answer: answerText,
+    }
+
+    const stringifedData = JSON.stringify(data);
+
+    try{
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: stringifedData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.correct) {
+                handleChoice("correct!");
+            } else {
+                handleChoice("incorrect!");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            console.log(stringifedData)
+            alert('An error occurred while checking the answer. Please try again.');
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while checking the answer. Please try again.');
+    }
+}
+
+
+//Load the basic game state
+let hp = 100;
+let level = 1;
+let score = 0;
+
+updateHPBar(hp);
+updateLevel(level);
+updateScore(score);
+
+playBackgroundMusic(); //Try play it off the bat.
+document.addEventListener('keydown', (e) => {
+    playBackgroundMusic();
+});
+document.addEventListener('click', (e) => {
+    playBackgroundMusic();
+});
+</script>
 </html>

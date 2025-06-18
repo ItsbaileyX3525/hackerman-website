@@ -4,6 +4,7 @@ const express = require('express');
 const { redirect } = require('express/lib/response');
 const path = require('path');
 const app = express();
+const submitRoutes = require('./routes/submit');
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -167,7 +168,7 @@ app.post('/submit', (req, res) => {
 				return res.json({ error: true, content: `Password is incorrect!` });
 			}
 		case 3:
-			if (password === 'G0q77>a50TkG') {
+			if (password === 'G0q77>a50TkG' || password == '"G0q77>a50TkG"') {
 				const data = sendLevel4();
 				const htmlData = data[0];
 				const jsData = data[1];
@@ -176,7 +177,7 @@ app.post('/submit', (req, res) => {
 				return res.json({ error: true, content: `Password is incorrect!` });
 			}
 		case 4:
-			if (password === 'kX8[5L3iGS)`') {
+			if (password === 'kX8[5L3iGS)`' || password === 'kX8[5L3iGS)') {
 				const data = sendLevel5();
 				const htmlData = data[0];
 				return res.json({ level: '5', content: htmlData });
@@ -237,6 +238,8 @@ app.post('/submit', (req, res) => {
 			return res.json({ error: true, content: `Invalid level!` });
 	}
 });
+
+app.use('/api', submitRoutes);
 
 const port = process.env.PORT || 3000;
 
