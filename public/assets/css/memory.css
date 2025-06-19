@@ -1,0 +1,594 @@
+body {
+    font-family: 'Courier New', 'Fira Code', monospace;
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+    color: #00ff41;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(0,255,65,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(0,191,255,0.10) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255,0,150,0.10) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.return-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+}
+
+.return-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.memory-container {
+    background: rgba(10, 10, 30, 0.92);
+    border: 2px solid #00ff41;
+    border-radius: 16px;
+    box-shadow: 0 0 30px #00ff4144, 0 0 80px #00bfff22 inset;
+    padding: 32px 24px;
+    max-width: 750px;
+    margin: 60px auto;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.memory-container::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 20% 50%, rgba(0,255,65,0.10) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(0,191,255,0.10) 0%, transparent 60%),
+        radial-gradient(circle at 40% 80%, rgba(255,0,150,0.08) 0%, transparent 70%);
+    animation: memory-bg-move 12s linear infinite alternate;
+}
+
+@keyframes memory-bg-move {
+    0% {
+        background-position:
+            20% 50%,
+            80% 20%,
+            40% 80%;
+    }
+    100% {
+        background-position:
+            30% 60%,
+            70% 30%,
+            50% 90%;
+    }
+}
+
+#restart-btn {
+    background: linear-gradient(45deg, #ff0080, #ff4500);
+    color: #fff;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Courier New', 'Fira Code', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 1.1rem;
+    margin: 0 auto;
+    margin-top: 18px;
+    box-shadow: 0 0 18px #ff008088, 0 0 8px #ff450088;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    display: block;
+}
+
+#restart-btn:hover, #restart-btn:focus {
+    background: linear-gradient(45deg, #ff4500, #ff0080);
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 0 32px #ff0080cc, 0 0 16px #ff4500cc;
+    outline: none;
+}
+
+.memory-container h2 {
+    color: #00bfff;
+    margin-bottom: 24px;
+    text-shadow: 0 0 12px #00bfff;
+    letter-spacing: 2px;
+}
+
+.memory-board {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    grid-gap: 50px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.memory-card {
+    width: 100px;
+    height: 120px;
+    background: linear-gradient(135deg, #0c0c0c 60%, #1a1a2e 100%);
+    border: 2px solid #00ff41;
+    border-radius: 10px;
+    box-shadow: 0 0 16px #00ff4166;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    color: transparent;
+    text-shadow: none; /* Remove text shadow that makes text visible */
+    user-select: none;
+    padding: 8px;
+}
+
+.memory-card::before {
+    content: '?';
+    position: absolute;
+    font-size: 3rem;
+    color: #00ff41;
+    text-shadow: 0 0 12px #00ff41;
+    z-index: 2; /* Higher z-index to ensure it's on top */
+    background: rgba(12, 12, 12, 0.95); /* Semi-opaque background */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+}
+
+.memory-card.flipped,
+.memory-card.matched {
+    color: #0c0c0c;
+    border-color: #00bfff;
+    box-shadow: 0 0 24px #00bfff99;
+    transform: scale(1.08);
+    text-shadow: none;
+}
+.memory-card.flipped{
+    background: #00bfff;
+}
+
+.memory-card.matched {
+    background: #00ff41 !important;
+}
+
+.memory-card.mismatched {
+    background: #ff4500 !important;
+}
+
+.memory-card.flipped::before,
+.memory-card.matched::before {
+    display: none;
+}
+
+.memory-card:hover::after {
+    box-shadow: 0 0 16px 4px #00ff41cc;
+}
+
+#restart-btn {
+    margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+    .memory-board {
+        grid-template-columns: repeat(4, 60px);
+        grid-gap: 10px;
+        margin-bottom: 15px;
+    }
+    .memory-card {
+        width: 60px;
+        height: 80px;
+        font-size: 1.3rem;
+    }
+    .memory-container {
+        padding: 20px 16px;
+    }
+}
+
+/* Amogus stuff */
+
+
+.victory {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 4rem;
+  font-weight: 400;
+  color: #018bfb;
+  position: fixed;
+  top: 40px;
+}
+
+.victory:after {
+  content: "Victory";
+}
+
+.imposter {
+  margin-top: 100px;
+  display: flex;
+}
+
+.spacesuit {
+  position: relative;
+}
+
+.chest-and-head {
+  width: 140px;
+  height: 200px;
+  background: #852631;
+  position: relative;
+  border: 10px solid #000000;
+  border-radius: 60px 80px 0 0;
+  border-bottom: none;
+}
+
+.chest-and-head:after {
+  content: "";
+  width: 92%;
+  height: 85%;
+  background: #eb432f;
+  position: absolute;
+  left: 4%;
+  /* top: -1px; {*/
+  z-index: 2;
+  border-radius: 58% 70% 28% 42% / 28% 56% 88% 89%;;
+}
+
+.legs {
+  height: 50px;
+  width: 60px;
+  position: relative;
+  z-index: 2;
+  background: #852631;
+  border: 10px solid #000000;
+  border-top: none;
+  border-radius: 0 0 22px 22px;
+}
+
+.legs::after {
+  content: "";
+  height: 45px;
+  width: 60px;
+  position: absolute;
+  left: 70px;
+  background: #852631;
+  border: 10px solid #000000;
+  border-top: none;
+  border-radius: 0 0 22px 22px;
+}
+
+.legs::before {
+  content: "";
+  height: 10px;
+  width: 55px;
+  background: #852631;
+  background-color: #000000;
+  position: absolute;
+  top: -10px;
+  left: 40px;
+  border-radius: 0 0 10px 0;
+}
+
+.arm {
+  height: 120px;
+  width: 35px;
+  background: #eb432f;
+  position: absolute;
+  top: 75px;
+  left: -35px;
+  border: 10px solid #000000;
+  border-right: none;
+  border-radius: 20px 0 0 22px;
+}
+
+.arm:after {
+  content: "";
+  width: 25px; 
+  height: 80px;
+  background: #852631;
+  position: absolute;
+  top: 20px;
+  border-radius: 12px 0 0 10px;
+}
+
+.helmet-glass {
+  width: 110px;
+  height: 75px;
+  background: #225381;
+  position: absolute;
+  z-index: 3;
+  top: 40px;
+  left: 50px;
+  border: 10px solid #000000;
+  border-radius: 25px 50px 30px 30px;
+}
+
+.helmet-glass:after {
+  content: "";
+  width: 85%;
+  height: 65%;
+  background: #71d4ec;
+  left: 13px;
+  position: absolute;
+  z-index: 4;
+  border-radius: 0 28px 3px 30px;
+}
+
+.helmet-glass:before {
+  content: "";
+  width: 45%;
+  height: 22%;
+  background: #ffffff;
+  position: absolute;
+  left: 40px;
+  top: 5px;
+  z-index: 5;
+  border-radius: 10px;
+  transform: rotate(6deg);
+}
+
+.background {
+  width: 70vw;
+  height: 1vh;
+  margin-top: 30px;
+  background: #59a4a3;
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: 6px 6px 80px 110px #59a4a3;
+}
+
+.name {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #01c90b;
+  position: fixed;
+  margin-top: 200px;
+}
+
+.name:after {
+  content: "ItsbaileyX3525";
+}
+
+/* Scoped Amogus styles */
+.amogus-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.amogus-screen *,
+.amogus-screen *:before,
+.amogus-screen *:after {
+    box-sizing: border-box;
+}
+
+.amogus-screen .victory {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 4rem;
+    font-weight: 400;
+    color: #018bfb;
+    position: fixed;
+    top: 40px;
+}
+
+.amogus-screen .victory:after {
+    content: "Victory";
+}
+
+.amogus-screen .imposter {
+    margin-top: 100px;
+    display: flex;
+}
+
+.amogus-screen .spacesuit {
+    position: relative;
+}
+
+.amogus-screen .chest-and-head {
+    width: 140px;
+    height: 200px;
+    background: #852631;
+    position: relative;
+    border: 10px solid #000000;
+    border-radius: 60px 80px 0 0;
+    border-bottom: none;
+}
+
+.amogus-screen .chest-and-head:after {
+    content: "";
+    width: 92%;
+    height: 85%;
+    background: #eb432f;
+    position: absolute;
+    left: 4%;
+    z-index: 2;
+    border-radius: 58% 70% 28% 42% / 28% 56% 88% 89%;
+}
+
+.amogus-screen .legs {
+    height: 50px;
+    width: 60px;
+    position: relative;
+    z-index: 2;
+    background: #852631;
+    border: 10px solid #000000;
+    border-top: none;
+    border-radius: 0 0 22px 22px;
+}
+
+.amogus-screen .legs::after {
+    content: "";
+    height: 45px;
+    width: 60px;
+    position: absolute;
+    left: 70px;
+    background: #852631;
+    border: 10px solid #000000;
+    border-top: none;
+    border-radius: 0 0 22px 22px;
+}
+
+.amogus-screen .legs::before {
+    content: "";
+    height: 10px;
+    width: 55px;
+    background: #852631;
+    background-color: #000000;
+    position: absolute;
+    top: -10px;
+    left: 40px;
+    border-radius: 0 0 10px 0;
+}
+
+.amogus-screen .arm {
+    height: 120px;
+    width: 35px;
+    background: #eb432f;
+    position: absolute;
+    top: 75px;
+    left: -35px;
+    border: 10px solid #000000;
+    border-right: none;
+    border-radius: 20px 0 0 22px;
+}
+
+.amogus-screen .arm:after {
+    content: "";
+    width: 25px; 
+    height: 80px;
+    background: #852631;
+    position: absolute;
+    top: 20px;
+    border-radius: 12px 0 0 10px;
+}
+
+.amogus-screen .helmet-glass {
+    width: 110px;
+    height: 75px;
+    background: #225381;
+    position: absolute;
+    z-index: 3;
+    top: 40px;
+    left: 50px;
+    border: 10px solid #000000;
+    border-radius: 25px 50px 30px 30px;
+}
+
+.amogus-screen .helmet-glass:after {
+    content: "";
+    width: 85%;
+    height: 65%;
+    background: #71d4ec;
+    left: 13px;
+    position: absolute;
+    z-index: 4;
+    border-radius: 0 28px 3px 30px;
+}
+
+.amogus-screen .helmet-glass:before {
+    content: "";
+    width: 45%;
+    height: 22%;
+    background: #ffffff;
+    position: absolute;
+    left: 40px;
+    top: 5px;
+    z-index: 5;
+    border-radius: 10px;
+    transform: rotate(6deg);
+}
+
+.amogus-screen .background {
+    width: 70vw;
+    height: 1vh;
+    margin-top: 30px;
+    background: #59a4a3;
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    box-sizing: border-box;
+    box-shadow: 6px 6px 80px 110px #59a4a3;
+}
+
+.amogus-screen .name {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #05c30e;
+    position: fixed;
+    margin-top: 200px;
+}
+
+.amogus-screen .name:after {
+    content: "ItsbaileyX3525";
+}
+
+.amogus-screen:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, #000, #000);
+    z-index: 30;
+    animation: amogus-animate 2s linear forwards;
+}
+
+@keyframes amogus-animate {
+    0% {
+        right: 0;
+    }
+    100% {
+        right: -200%;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .amogus-screen .imposter,
+    .amogus-screen .victory,
+    .amogus-screen .name {
+        zoom: 60%;
+    }
+    .amogus-screen .background {
+        zoom: .7;
+        margin-top: 10px;
+    }
+}
