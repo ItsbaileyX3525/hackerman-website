@@ -94,4 +94,28 @@ router.post('/question', (req, res) => {
 	}
 });
 
+router.post('/terminal', (req, res) => {
+	console.log("Received command:", req.body);
+	const { command } = req.body;
+	console.log(command)
+	if(command === "password"){
+		const password = req.body.password;
+		if(password === "A1fr5dW6sH3r3"){
+			res.status(200).send({ success: true, validationkey: "valid-key-525765" });
+			return;
+		}else{
+			res.status(200).send({ success: false, error: "Invalid password. Please try again." });
+			return;
+		}
+	}
+
+	//Add more commands as needed
+
+
+
+
+	// If command not found then lil cheater (dexter) be messin
+	res.status(200).send({ success: false, error: "Sorry Shlexter this command not found." });
+});
+
 module.exports = router;
