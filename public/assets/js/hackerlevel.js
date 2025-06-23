@@ -10,3 +10,177 @@ function showNotification(message, type = 'success', duration = 2500) {
         }, 500);
     }, duration);
 }
+
+let firstLoad = true;
+let loadedData = false;
+let canCorrect = true;
+let loadedSomeReturns = false;
+
+function appendMeSomeReturns(){
+    loadedSomeReturns = true;
+    const gameDiv = document.getElementById('flex-item');
+    const p = document.createElement('p');
+    p.innerHTML = `
+    <div style="text-align: center; margin-top: 20px;">
+        <button onclick='localStorage.clear();window.location.reload();' id="return-button" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Clear some cookies</button>
+    </div>
+    `;
+    p.style.textAlign = 'center';
+    gameDiv.appendChild(p);
+
+}
+
+function loadSomeDevs(){
+    console.log("Loading some devs...");
+    const gameDiv = document.getElementById('flex-item');
+    const img = document.createElement('img');
+    const p = document.createElement('p');
+    p.innerHTML = `
+    Meet the developers of this game!<br><br>
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <span style="flex:1; text-align:left;">
+                Josh Hughes<br>
+                <small>playtested the game!</small>
+            </span>
+            <span style="flex:1; text-align:center;">
+                Phillip McHale<br>
+                <small>created the powerpoints</small>
+            </span>
+            <span style="flex:1; text-align:right;">
+                Bailey Miles<br>
+                <small>created this awesome site!</small>
+            </span>
+        </div>
+    `;
+    p.style.textAlign = 'center';
+    gameDiv.appendChild(p);
+    img.src = '/assets/images/dev.png';
+    img.alt = 'Developers';
+    img.style.width = '90%';
+    img.style.height = '400px';
+    img.style.display = 'block';
+    img.style.margin = '0 auto';
+    img.style.borderRadius = '10px';
+    gameDiv.appendChild(img);
+}
+
+async function loadLevel(password) {
+    const url = window.location.protocol + '//' + window.location.host + '/submit';
+    const data = {
+        level: currentLevel,
+        password: password
+    }
+
+    console.log("send", currentLevel, password);
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const responseData = await response.json();
+
+        if (responseData.error == "true" || responseData.error === true) {
+            showNotification(responseData.content, 'error');
+            console.log("error");
+            if (responseData.js) {
+                eval(responseData.js);
+            }
+            if (responseData.redirect) {
+                window.location.href = responseData.redirect.url;
+            }
+            return;
+        }
+
+        currentLevel = parseInt(responseData.level, 10);
+        localStorage.setItem('currentLevel', currentLevel-1);
+        localStorage.setItem('storedPassword', password);
+        
+        const htmldata = responseData.content;
+        const flexContainer = document.getElementById('hacker-game');
+        flexContainer.innerHTML = htmldata;
+
+        if(firstLoad) {
+            firstLoad = false;
+            showNotification("Welcome to the Hacker Game!", 'success');
+        }else{
+            if(canCorrect){
+                showNotification("Password accepted!", 'success');
+            }
+        }
+        
+        if(loadedData) {
+            loadedData = false;
+            if(!window.location.href.includes("?password=")){
+                showNotification("Loaded saved level!", 'info');
+            }
+        }
+
+        if(responseData.js){
+            eval(responseData.js);
+        }
+
+        if(!canCorrect) {
+            canCorrect = true;
+        }
+
+        // Clear URL parameter after successful level load (except for level 5)
+        if(currentLevel !== 5 && window.location.href.includes("?password=")){
+            window.history.replaceState({}, document.title, "/hackerlevel.html");
+        }
+
+        // Remove the event listeners from here - they should only be added once
+
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+    }
+}
+
+// Add event listeners only once using event delegation
+document.addEventListener('click', function (event) {
+    if (event.target && event.target.id === 'submit') {
+        const passwordInput = document.getElementById('password-input');
+        if (passwordInput) {
+            const password = passwordInput.value.trim();
+            loadLevel(password);
+        }
+    }
+});
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        const passwordInput = document.getElementById('password-input');
+        if (passwordInput && document.activeElement === passwordInput) {
+            const password = passwordInput.value.trim();
+            loadLevel(password);
+        }
+    }
+});
+
+let currentLevel = parseInt(localStorage.getItem('currentLevel'), 10) || 0;
+let storedPassword = localStorage.getItem('storedPassword') || '';
+
+if(currentLevel == 0) {
+    loadLevel('password');
+}else{
+    console.log(storedPassword)
+    loadLevel(storedPassword);
+    firstLoad = false;
+    loadedData = true;
+    canCorrect = false;
+}
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Alt' && !loadedSomeReturns) {
+        appendMeSomeReturns();
+    }
+});
+

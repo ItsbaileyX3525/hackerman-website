@@ -1,0 +1,111 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #232526 0%, #414345 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fira Mono', 'Consolas', monospace;
+    color: #e0e0e0;
+}
+
+.hud {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(30, 30, 30, 0.85);
+    border: 2px solid #00ff99;
+    border-radius: 12px;
+    padding: 16px 32px;
+    box-shadow: 0 0 16px #00ff99aa;
+    display: flex;
+    gap: 32px;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+.hud .hp-bar {
+    background: #222;
+    border: 1px solid #00ff99;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 120px;
+    height: 18px;
+    margin-left: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.hud .hp-bar-inner {
+    background: linear-gradient(90deg, #ff0055 0%, #ffcc00 100%);
+    height: 100%;
+    width: 100%;
+    transition: width 0.4s;
+}
+
+.container {
+    background: rgba(20, 20, 20, 0.95);
+    border: 2px solid #00ff99;
+    border-radius: 18px;
+    box-shadow: 0 0 32px #00ff9944;
+    padding: 48px 36px 36px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 350px;
+    max-width: 90vw;
+}
+
+.question {
+    font-size: 1.5rem;
+    margin-bottom: 32px;
+    text-align: center;
+    text-shadow: 0 0 8px #00ff99cc;
+    letter-spacing: 1.5px;
+}
+
+.choices {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+}
+
+.choices button {
+    background: #232526;
+    color: #00ff99;
+    border: 2px solid #00ff99;
+    border-radius: 8px;
+    padding: 14px 32px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 0 8px #00ff9955;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+
+.choices button:hover:not(:disabled) {
+    background: #00ff99;
+    color: #232526;
+    transform: scale(1.07);
+    box-shadow: 0 0 16px #00ff99cc;
+}
+
+.choices button:disabled {
+    background: #444;
+    color: #666;
+    border-color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.footer {
+    margin-top: 18px;
+    font-size: 0.95rem;
+    color: #888;
+    text-align: center;
+    opacity: 0.7;
+    letter-spacing: 1px;
+}

@@ -3,111 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/quest.css">
     <title>Hacker quest</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #232526 0%, #414345 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Fira Mono', 'Consolas', monospace;
-            color: #e0e0e0;
-        }
-
-        .hud {
-            position: absolute;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(30, 30, 30, 0.85);
-            border: 2px solid #00ff99;
-            border-radius: 12px;
-            padding: 16px 32px;
-            box-shadow: 0 0 16px #00ff99aa;
-            display: flex;
-            gap: 32px;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-
-        .hud .hp-bar {
-            background: #222;
-            border: 1px solid #00ff99;
-            border-radius: 8px;
-            overflow: hidden;
-            width: 120px;
-            height: 18px;
-            margin-left: 8px;
-            display: inline-block;
-            vertical-align: middle;
-        }
-
-        .hud .hp-bar-inner {
-            background: linear-gradient(90deg, #ff0055 0%, #ffcc00 100%);
-            height: 100%;
-            width: 100%;
-            transition: width 0.4s;
-        }
-
-        .container {
-            background: rgba(20, 20, 20, 0.95);
-            border: 2px solid #00ff99;
-            border-radius: 18px;
-            box-shadow: 0 0 32px #00ff9944;
-            padding: 48px 36px 36px 36px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 350px;
-            max-width: 90vw;
-        }
-
-        .question {
-            font-size: 1.5rem;
-            margin-bottom: 32px;
-            text-align: center;
-            text-shadow: 0 0 8px #00ff99cc;
-            letter-spacing: 1.5px;
-        }
-
-        .choices {
-            display: flex;
-            gap: 24px;
-            margin-bottom: 12px;
-        }
-
-        .choices button {
-            background: #232526;
-            color: #00ff99;
-            border: 2px solid #00ff99;
-            border-radius: 8px;
-            padding: 14px 32px;
-            font-size: 1.1rem;
-            font-family: inherit;
-            cursor: pointer;
-            box-shadow: 0 0 8px #00ff9955;
-            transition: background 0.2s, color 0.2s, transform 0.1s;
-        }
-
-        .choices button:hover {
-            background: #00ff99;
-            color: #232526;
-            transform: scale(1.07);
-            box-shadow: 0 0 16px #00ff99cc;
-        }
-
-        .footer {
-            margin-top: 18px;
-            font-size: 0.95rem;
-            color: #888;
-            text-align: center;
-            opacity: 0.7;
-            letter-spacing: 1px;
-        }
-    </style>
 </head>
 <body>
     <div class="hud">
@@ -141,6 +38,10 @@ const correctSounds = {
     "correct3": new Audio('assets/sounds/plankton-correct.mp3'),
 }
 
+// Remove client-side questions array - now fetched from server
+let currentQuestionIndex = 0;
+let totalQuestions = 0;
+
 function playBackgroundMusic(){
     const length = Object.keys(backgroundMusic).length;
     const randomIndex = Math.floor(Math.random() * length);
@@ -151,7 +52,7 @@ function playBackgroundMusic(){
     music.play()
     music.addEventListener('ended', function() {
         music.remove();
-        playBackgroundMusic(); // Will this cause recursion error?
+        playBackgroundMusic();
     });
 }
 
@@ -170,6 +71,43 @@ function updateLevel(newLevel) {
     levelElement.textContent = 'Level: ' + newLevel;
 }
 
+function loadQuestion(index) {
+    const url = window.location.protocol + '//' + window.location.host + '/api/quest-question/' + index;
+    
+    fetch(url)
+    .then(response => {
+        if (!response.ok) {
+            // Game completed!
+            document.querySelector('.question').textContent = "Congratulations! Quest Complete!";
+            document.querySelector('.choices').innerHTML = '<button onclick="window.location.href=\'/games/\'" style="font-size: 1.2rem; padding: 20px 40px;">Return to Games</button>';
+            return;
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (!data) return; // Already handled completion above
+        
+        totalQuestions = data.totalQuestions;
+        
+        document.querySelector('.question').textContent = data.question;
+        
+        const choicesDiv = document.querySelector('.choices');
+        choicesDiv.innerHTML = '';
+        
+        data.choices.forEach((choice, i) => {
+            const button = document.createElement('button');
+            button.id = `choice${i + 1}`;
+            button.textContent = choice;
+            button.onclick = () => checkAnswer(`choice${i + 1}`);
+            choicesDiv.appendChild(button);
+        });
+    })
+    .catch(error => {
+        console.error('Error loading question:', error);
+        alert('Error loading question. Please try again.');
+    });
+}
+
 function handleChoice(choice){
     if(choice == "correct!"){
         score += 10;
@@ -183,6 +121,12 @@ function handleChoice(choice){
         });
         level += 1;
         updateLevel(level);
+        
+        // Move to next question after a delay
+        setTimeout(() => {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        }, 1500);
     } else {
         const steveHurt = new Audio('assets/sounds/steve_hurt.mp3');
         steveHurt.play();
@@ -190,19 +134,38 @@ function handleChoice(choice){
             steveHurt.remove();
         });
         hp -= 20;
-        if (hp < 0){
+        if (hp <= 0){
             hp = 0;
             const gameOver = new Audio('assets/sounds/death.mp3');
             gameOver.play();
             gameOver.addEventListener('ended', function() {
                 gameOver.remove();
             });
+            // Game over - restart
+            setTimeout(() => {
+                alert('Game Over! Restarting...');
+                location.reload();
+            }, 2000);
         } 
         updateHPBar(hp);
+        
+        // Move to next question after a delay (even if wrong)
+        setTimeout(() => {
+            currentQuestionIndex++;
+            loadQuestion(currentQuestionIndex);
+        }, 1500);
     }
 }
 
 function checkAnswer(choiceId){
+    // Disable all buttons immediately to prevent multiple clicks
+    const allButtons = document.querySelectorAll('.choices button');
+    allButtons.forEach(button => {
+        button.disabled = true;
+        button.style.cursor = 'not-allowed';
+        button.style.opacity = '0.6';
+    });
+
     const url = window.location.protocol + '//' + window.location.host + '/api/question';
     const questionText = document.querySelector('.question').textContent;
     const answerText = document.getElementById(choiceId).textContent;
@@ -232,14 +195,25 @@ function checkAnswer(choiceId){
         .catch(error => {
             console.error('Error:', error);
             console.log(stringifedData)
+            // Re-enable buttons on error
+            allButtons.forEach(button => {
+                button.disabled = false;
+                button.style.cursor = 'pointer';
+                button.style.opacity = '1';
+            });
             alert('An error occurred while checking the answer. Please try again.');
         });
     } catch (error) {
         console.error('Error:', error);
+        // Re-enable buttons on error
+        allButtons.forEach(button => {
+            button.disabled = false;
+            button.style.cursor = 'pointer';
+            button.style.opacity = '1';
+        });
         alert('An error occurred while checking the answer. Please try again.');
     }
 }
-
 
 //Load the basic game state
 let hp = 100;
@@ -250,7 +224,10 @@ updateHPBar(hp);
 updateLevel(level);
 updateScore(score);
 
-playBackgroundMusic(); //Try play it off the bat.
+// Load the first question from server
+loadQuestion(currentQuestionIndex);
+
+playBackgroundMusic();
 document.addEventListener('keydown', (e) => {
     playBackgroundMusic();
 });

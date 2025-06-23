@@ -4,8 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Javascript console</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            height: 100vh;
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            display: flex;
+            flex: 1;
+        }
+        
+        .left-panel, .right-panel {
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .input-area {
+            width: 100%;
+            height: 100%;
+            background-color: #2d2d2d;
+            color: #ffffff;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 20px;
+            resize: none;
+            outline: none;
+            border-right: 2px solid #444;
+            overflow-y: auto;
+            box-sizing: border-box;
+        }
+        
+        .right-panel {
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .output-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1e1e1e;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            padding: 20px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-sizing: border-box;
+            border: none;
+            outline: none;
+        }
+        
+        /* Custom scrollbar styling for webkit browsers */
+        .input-area::-webkit-scrollbar,
+        .output-area::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        .input-area::-webkit-scrollbar-track,
+        .output-area::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        .input-area::-webkit-scrollbar-thumb,
+        .output-area::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 6px;
+        }
+        
+        .input-area::-webkit-scrollbar-thumb:hover,
+        .output-area::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+        
+        /* Firefox scrollbar styling */
+        .input-area,
+        .output-area {
+            scrollbar-width: thin;
+            scrollbar-color: #555 #1a1a1a;
+        }
+        
+        .input-area:focus {
+            background-color: #363636;
+        }
+        
+        .button-container {
+            background-color: #2d2d2d;
+            padding: 10px;
+            text-align: center;
+            border-top: 2px solid #444;
+        }
+        
+        .run-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        .run-button:hover {
+            background-color: #45a049;
+        }
+        
+        .run-button:active {
+            background-color: #3d8b40;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="left-panel">
+            <textarea class="input-area" placeholder="Enter your code here..."></textarea>
+        </div>
+        <div class="right-panel">
+            <div class="output-area">Welcome to the console!
+Ready for input...
+</div>
+        </div>
+    </div>
+    <div class="button-container">
+        <button class="run-button">Run Code</button>
+    </div>
 </body>
+<script> //Due to security reasons this page will be completely detached from the server.
+    const input_area = document.querySelector('.input-area');
+    const output_area = document.querySelector('.output-area'); // Fixed typo: was "ouput_area"
+    const run_button = document.querySelector('.run-button');
+    
+    console.log = function(message) {
+        output_area.textContent += `\n${message}`;
+        output_area.scrollTop = output_area.scrollHeight;
+    }
+
+    console.clear = function() {
+        output_area.textContent = 'Cleared console!\n\n';
+    }
+
+    run_button.addEventListener('click', () => {
+        try {
+            const output = eval(input_area.value);
+
+            if (input_area.value.trim().includes("console.log")) {
+                return;
+            }
+            
+            if (input_area.value.trim() === '') {
+                output_area.textContent += '\nPlease enter some code to run.';
+                output_area.scrollTop = output_area.scrollHeight;
+                return;
+            }
+            if(output !== undefined) {
+                output_area.textContent += `\n${output}`;
+                output_area.scrollTop = output_area.scrollHeight;
+                return;
+            }
+        } catch (error) {
+            output_area.textContent += `\nError: ${error.message}`;
+            output_area.scrollTop = output_area.scrollHeight;
+        }
+    })
+</script>
 </html>

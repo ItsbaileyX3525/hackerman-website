@@ -14,7 +14,7 @@ app.use(express.json());
 function sendLevel1(){
 	return `<div id="flex-item">
             <h1>Level 1</h1>
-            <input type="text" id="password-input" placeholder="Enter password here">
+            <input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="submit" tabindex="0">Submit</div><br>
 			<p>Sometimes passwords are just hidden text on the page.</p>
 			<p>Highlight the text below for a hint</p>
@@ -26,7 +26,7 @@ function sendLevel1(){
 function sendLevel2(){
 	return `        <!-- Password: 4gPh!97mh7'0 --><div id="flex-item">
             <h1>Level 2</h1>
-            <input type="text" id="password-input" placeholder="Enter password here">
+            <input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="submit" tabindex="0">Submit</div><br>
             
         </div>
@@ -41,7 +41,7 @@ function sendLevel2(){
 function sendLevel3(){
 	return [`<div id="flex-item">
             <h1>Level 3</h1>
-            <input type="text" id="password-input" placeholder="Enter password here">
+            <input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="submit" tabindex="0">Submit</div><br>
         </div>
 		<div id="flex-item">
@@ -55,7 +55,7 @@ function sendLevel3(){
 function sendLevel4() {
 	return [`<div id="flex-item">
 			<h1>Level 4</h1>
-			<input type="text" id="password-input" placeholder="Enter password here">
+			<input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
 			<div id="submit" tabindex="0">Submit</div><br>
 		</div>
 		<div id="flex-item">
@@ -80,7 +80,7 @@ function sendLevel4() {
 function sendLevel5(){
 	return [`<div id="flex-item">
             <h1>Level 5</h1>
-            <input type="text" id="password-input" placeholder="Enter password here">
+            <input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="submit" tabindex="0">Submit</div><br>
 			<p>Websites often send passwords through POST and GET, POST is just a secure way to send a password to the server, GET is an insecure way and sometimes websites mess up and use GET requests incorrectly, displaying the password is the url bar. GET requests are sent when you <text-data style="font-weight: bold">SUBMIT</text-data> the data</p>
 			<p id="hint" style="color: transparent;">Press the submit button and check the url at the top!</p>
@@ -90,9 +90,9 @@ function sendLevel5(){
 function sendLevel6(){
 	return [`<div id="flex-item">
             <h1>Level 6 - Fun time!</h1>
-            <input type="text" id="password-input" placeholder="Enter password here">
+            <input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="submit" tabindex="0">Submit</div><br>
-			<p>For the password to this level you have to read about the <a target="_blank" style="color:salmon;" href="https://malware-history.fandom.com/wiki/YouAreAnIdiot">YouAreAnIdiot</a> and the password is hidden within.</p>
+			<p>For the password to this level you have to read about the <a target="_blank" style="color:salmon;" href="https://malware-history.fandom.com/wiki/YouAreAnIdiot">YouAreAnIdiot (Click me)</a> and the password is hidden within.</p>
 			<p id="hint" style="color: transparent;">The password is the year that it was active in the format yyyy-yyyy</p>
         </div>`,``]
 }
@@ -100,10 +100,10 @@ function sendLevel6(){
 function sendLevel7(){
 	return [`<div id="flex-item">
             <h1>Level 7</h1>
-            <input type="text" id="password-input" placeholder="Enter password here">
+            <input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="submit" tabindex="0">Submit</div><br>
 			<p>Another way of hacking is through physical methods, sometimes you can find stored passwords and other sensitive data.</p>
-			<p>If you have ever watched "Ready player one", the big bad stores his password to his account on a sticky note...</p>
+			<p>If you have ever watched "Ready player one", the big bad stores his password to his account on a sticky note... Or rather the whiteboard in this case.</p>
 
 			<p id="hint" style="color: transparent;">The password is somewhere close to you...</p>
         </div>`,``]
@@ -112,18 +112,18 @@ function sendLevel7(){
 function sendLevel8(){
 	return [`<div id="flex-item">
             <h1>Level 8</h1>
-            <input type="text" id="password-input" placeholder="Enter password here">
+            <input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
             <div id="submit" tabindex="0">Submit</div><br>
 			<p>01000000 11000010 10100011 01100100 00101001 01010110 01001110 01011100 00111001 00101101 00110001 01001000 00110010</p>
 			<p id="hint" style="color: transparent;">This is called binary and can be translated into actual text</p>
-			<p>You can use online tools like <a style="color: salmon;" target=_blank href="https://www.rapidtables.com/convert/number/binary-to-ascii.html">binary converters</a> to change the binary to text!</p>
+			<p>You can use online tools like <a style="color: salmon;" target=_blank href="https://www.rapidtables.com/convert/number/binary-to-ascii.html">binary converters (Click me)</a> to change the binary to text!</p>
         </div>`,``]
 }
 
 function sendLevel9(){
 	return [`<div id="flex-item">
 			<h1>Level 9</h1>
-			<input type="text" id="password-input" placeholder="Enter password here">
+			<input type="text" id="password-input" name="new-password" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
 			<div id="submit" tabindex="0">Submit</div><br>
 			<p>Sometimes websites don't do a thing called "sanitization" which is used to make sure that the user can't input malicious code into the website.</p>
 			<p>In this case the website has a javascript function that is used to check if the password is correct, but it doesn't sanitize the input, so you can use a thing called "XSS" to get the password.</p>
@@ -135,7 +135,7 @@ function sendLevel9(){
 function sendLevel10(){
 	return [`<div id="flex-item">
 			<h1>Level 10</h1>
-			<input type="text" id="password-input" placeholder="Enter password here">
+			<input type="text" id="password-input" placeholder="Enter password here" autocomplete="off" autocorrect="off" spellcheck="false">
 			<div id="submit" tabindex="0">Submit</div><br>
 			<p>To finish off on a good note the final password is easy, just copy and paste: <text-data style="font-weight: bold;">IWinTheGame!</text-data></p>
 			<p id="hint" style="color: transparent;">Things are easy-er than they seem.</p>
@@ -187,14 +187,9 @@ app.post('/submit', (req, res) => {
 		case 5:
 			if (password === 'vwKPydUFJMzF') {
 				return res.json({ level: '6', content: sendLevel6()[0] });
-			} else if (password === 'kX8[5L3iGS)`'){ //Dont know why this happens but this is a fix for it.
-				const data = sendLevel5();
-				const htmlData = data[0];
-				return res.json({ level: '5', content: htmlData });
 			}
 			else {
 				return res.json({ error: true, content: `Password is incorrect!`, redirect: { url: "/hackerlevel.html?password=vwKPydUFJMzF", delay: 500 } });
-
 			}
 		case 6:
 			if (password === '2009-2012') {
