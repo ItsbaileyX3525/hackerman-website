@@ -249,7 +249,7 @@ const commands = {
             term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} does not exist in ${currentPath[currentPath.length - 1]}.]`);
         }
     },
-    async fuff(args) {
+    async ffuf(args) {
         if (!fuffInstalled) {
             term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Command fuff Not Found!]`);
             return;
