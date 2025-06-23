@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOWZER YOU WON!</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #333;
+            margin: 0;
+        }
+        h1 {
+            font-size: 3rem;
+            color: #ff4081;
+            text-shadow: 2px 2px 8px #fff176, 0 0 10px #ff4081;
+            margin-bottom: 0.5em;
+            animation: pop 1s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.7); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        p {
+            font-size: 1.2rem;
+            margin: 0.5em 0;
+            background: rgba(255,255,255,0.7);
+            padding: 0.5em 1em;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(255, 64, 129, 0.1);
+        }
+        button {
+            margin-top: 2em;
+            padding: 1em 2em;
+            font-size: 1.2rem;
+            background: linear-gradient(90deg, #ff4081 0%, #ffecb3 100%);
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 4px 16px rgba(255, 64, 129, 0.2);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(255, 64, 129, 0.3);
+        }
+        /* Confetti effect */
+        .confetti {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <canvas class="confetti"></canvas>
+    <h1>Congratulations!</h1>
+    <p>You won the game and sold all of the company data for a lovely profit!<br><br>
+    Of course you didn't really sell the data because you are just a white hat hacker!<br><br>
+    But you did win the game!<br><br>
+    Well done!<br><br>
+    Feel free to play again or check out the other games!</p>
+    <button onclick="window.location.href='/'">Return home</button>
+    <script>
+        // Simple confetti animation
+        const canvas = document.querySelector('.confetti');
+        const ctx = canvas.getContext('2d');
+        let W = window.innerWidth, H = window.innerHeight;
+        canvas.width = W; canvas.height = H;
+
+        const confettiCount = 120;
+        const confettiColors = ['#ff4081', '#fff176', '#fcb69f', '#81d4fa', '#aed581'];
+        const confetti = [];
+
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        for (let i = 0; i < confettiCount; i++) {
+            confetti.push({
+                x: randomInt(0, W),
+                y: randomInt(-H, 0),
+                r: randomInt(5, 10),
+                d: randomInt(2, 6),
+                color: confettiColors[randomInt(0, confettiColors.length - 1)],
+                tilt: randomInt(-10, 10),
+                tiltAngle: 0,
+                tiltAngleIncremental: (Math.random() * 0.07) + .05
+            });
+        }
+
+        function drawConfetti() {
+            ctx.clearRect(0, 0, W, H);
+            confetti.forEach(c => {
+                ctx.beginPath();
+                ctx.lineWidth = c.r;
+                ctx.strokeStyle = c.color;
+                ctx.moveTo(c.x + c.tilt + (c.r / 3), c.y);
+                ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.d);
+                ctx.stroke();
+            });
+            updateConfetti();
+        }
+
+        function updateConfetti() {
+            confetti.forEach(c => {
+                c.y += (Math.cos(c.d) + 3 + c.d / 2) / 2;
+                c.x += Math.sin(0.01 * c.d);
+                c.tiltAngle += c.tiltAngleIncremental;
+                c.tilt = Math.sin(c.tiltAngle) * 15;
+                if (c.y > H) {
+                    c.x = randomInt(0, W);
+                    c.y = randomInt(-20, 0);
+                }
+            });
+        }
+
+        function animateConfetti() {
+            drawConfetti();
+            requestAnimationFrame(animateConfetti);
+        }
+
+        animateConfetti();
+
+        window.addEventListener('resize', () => {
+            W = window.innerWidth;
+            H = window.innerHeight;
+            canvas.width = W;
+            canvas.height = H;
+        });
+    </script>
+</body>
+</html>

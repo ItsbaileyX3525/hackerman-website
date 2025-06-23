@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENSITIVE INFORMATION</title>
+</head>
+	<style>
+		table {
+			border-collapse: collapse;
+			width: 100%;
+			font-family: monospace;
+		}
+		th, td {
+			border: 1px solid #aaa;
+			padding: 4px 8px;
+			text-align: left;
+		}
+	</style>
+<body>
+</body>
+<script>
+    const username = window.prompt("Please enter your username")
+    const password = window.prompt("Please enter your password")
+
+    try{
+        url = window.location.protocol + "//" + window.location.host + "/api/terminal"
+        const response = fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                command: "database_login",
+                username: username,
+                password: password
+            })
+        });
+        response.then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error("Network response was not ok");
+            }
+        }).then(data => {
+            const body = document.querySelector("body");
+            const newElement = document.createElement("div");
+            newElement.innerHTML = data.HTML
+            body.appendChild(newElement)
+            return;
+        }).catch(error => {
+            console.error("There was a problem with the fetch operation:", error);
+        });
+    } catch (error) {
+        console.error("An error occurred:", error);
+    }   
+</script>
+</html>

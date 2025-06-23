@@ -1,5 +1,6 @@
 let validationKey = "";
 let currentPath = ["home"];
+let fuffInstalled = false;
 
 const directoryStructure = {
     home: {
@@ -11,7 +12,10 @@ const directoryStructure = {
         },
         "downloads": {
             "maxwell.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/silly-cat/images/d/d5/Maxwell.png/revision/latest?cb=20231001194454"],
-            "Screenshots.7z": ["txt", "This is a 7z file that contains screenshots of the server. You can use the 'w3m' command to view the contents of this file."],
+            "Screenshots.7z": ["txt", "This is a 7z file that contains screenshots of the server. Unfortunately, I haven't added support to extract 7z files"],
+            "Databases": {
+                "Requires Login, use /login" : ["txt", "bro why you catting this?"]
+            }
         },
         "pictures": {
             "Phillip.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/4pI7kb.png"],
@@ -84,10 +88,14 @@ async function getValidationKey(password) {
 		});
 
 		const data = await response.json();
+        
+        console.log(data)
 
 		if (data.success) {
-			return { success: true, validationkey: data.validationkey };
-		}
+            const recievedFiles = data.newStructure
+            directoryStructure.home.downloads.Databases = recievedFiles	
+			return { success: true, validationkey: data.validationkey };	
+        }
 
 		return { success: false, error: data.error };
 
@@ -95,6 +103,80 @@ async function getValidationKey(password) {
 		console.error("Error fetching validation key:", error);
 		return { success: false, error: "Error fetching validation key." };
 	}
+}
+
+function returnSomeRgb(a, b, c) {
+    return { red: a, green: b, blue: c };
+}
+
+function randSleep(min, max) {
+	return sleep(Math.floor(Math.random() * (max - min + 1)) + min);
+}
+
+function getRandomSpeed() {
+	let speed = (Math.random() * 2 + 0.5).toFixed(2); // Between 0.5 and 2.5 MiB/s
+	return `${speed} MiB/s`;
+}
+
+function getRandomIp() {
+	return `${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}.${Math.floor(Math.random() * 256)}`;
+}
+
+function getRandomMirror() {
+	const mirrors = [
+		`https://mirror.rackspace.com/archlinux/community/os/x86_64/`,
+		`https://arch.mirror.constant.com/community/os/x86_64/`,
+		`https://mirror.osbeck.com/archlinux/community/os/x86_64/`,
+		`https://archlinux.dcc.uchile.cl/community/os/x86_64/`
+	];
+	return mirrors[Math.floor(Math.random() * mirrors.length)];
+}
+
+async function startTheFinale() {
+    term.echo(`[[;${hex(returnSomeRgb(25, 245, 17))};]Congratulations! You have successfully retrieved the database for all the admin usernames and passwords!]`);
+    await sleep(3000);
+    term.echo(`[[;${hex(returnSomeRgb(5, 243, 247))};]Now we need to find a webpage where we can use this login information that we have gathered. Unfortunately, Linux doesn't have a built-in way to scan webpages so you'll have to install a tool to do so... However I think that will be a little hard for you, so I will do it for you!]`);
+    await sleep(6000);
+	term.echo('[[;#ffffff;]> pacman -S ffuf]');
+    await randSleep(300, 500)
+	term.echo('resolving dependencies...');
+	await randSleep(800, 1700);
+	term.echo('looking for conflicting packages...');
+	await randSleep(800, 1700);
+	term.echo('');
+	term.echo('Packages (1) ffuf-2.1.0-1');
+	await randSleep(200, 300);
+	term.echo('');
+	term.echo('Total Download Size:    0.30 MiB');
+	term.echo('Total Installed Size:   1.10 MiB');
+	term.echo('');
+	term.echo(':: Proceed with installation? [Y/n]');
+	await randSleep(800, 1700);
+	term.echo('[[;#ffffff;]> y]');
+	term.echo(':: Retrieving packages...');
+	await randSleep(800, 1700);
+	let mirror = getRandomMirror();
+	let ip = getRandomIp();
+	let speed = getRandomSpeed();
+	term.echo(` downloading from ${mirror} (${ip})`);
+	await randSleep(1300, 1700);
+	term.echo(` ffuf-2.1.0-1-x86_64.pkg.tar.zst  100%  300.0 KiB ${speed} 00:00`);
+	await randSleep(1800, 2500);
+	term.echo(' checking keys in keyring...');
+	await randSleep(400, 900);
+	term.echo(' checking package integrity...');
+	await randSleep(400, 900);
+	term.echo(' loading package files...');
+	await randSleep(400, 900);
+	term.echo(' checking for file conflicts...');
+	await randSleep(400, 900);
+	term.echo(' checking available disk space...');
+	await randSleep(400, 900);
+	term.echo(' installing ffuf...');
+	await randSleep(900, 1700);
+	term.echo('[[;#00ff00;]ffuf installation complete.]');
+    term.echo(`[[;${hex(returnSomeRgb(5, 243, 247))};]Awesome! You can now use the ffuf command to scan the webpages on this site for any hidden webpages. Try it out!]`);
+    fuffInstalled = true;
 }
 
 function loadHelp(page){
@@ -105,6 +187,20 @@ function loadHelp(page){
             return "Probably the most importand command you will need to learn is the 'ls' command. This command will list all of the files and folders that are in the current directory that the console is in. By default terminals will often start in the home directory (if on Linux, C:/ on windows) type 'ls' to see what files and folders are accessible to you in this current directory. Type 'begin_hack 2' to continue."
         case 2:
             return "Ope! I completely forgot about the 'help' command! This command is very generic and usually a lot more complicated in an actual terminal, but in this terminal it will output all the commands that you can use on just a line or two! Make sure that you use this command if you ever forget (but can partially remember) a command that you can use! Type 'begin_hack 3' to continue.";
+        case 3:
+            return "Next command you should learn about is the 'cat' command which displays the contents of a file, this would usually be used for .txt files or programming files like .js, .py or .cpp which all contain raw text data. Using cat on files that are encrpyted or just dont support raw text can and will just spew out unintelligible content. Type 'begin_hack 4' to continue";
+        case 4:
+            return "I know your probably thinking (if you ran 'ls' like I said) \"Why are there so many directories, how do I access them?\" Well, that is very easy to answer, to change the directory your in, you can use the 'cd' command (which stands for change directory... I think). Typing cd then the directory you want to change to will do so and move you to it. Type 'begin_hack 5' to continue."
+        case 5:
+            return "We are nearing the end of all that you need to know now. The next command you neeed to know is 'sql' which is usually more complex than the implementation of this one but it essentially allows you to read \"SQL\" files which are not raw text therefore cannot be read with cat. Using a command like 'sql userDatabase.sql' will display all the usernames, passwords and emails of the people in a nice table that you can view with ease. Type 'begin_hack 6' to continue."
+        case 6:
+            return "YIPEE!!! You did it! You have learnt all the commands that you need to know, all this knowledge is everything you need to hack into the servers database and steal all that precious data (ethically of course). If you want some tips and tricks that you can do in the terminal like viewing images type 'begin_hack 7' to see them."
+        case 7:
+            return "Ahhh, so you wanna hear some tips and tricks? Well I gotchu. Lets start of with the image command, you can use the command 'w3m' and then the file name to see the image. Another cool thing you can do in this terminal is use 'Tab' to autocomplete the line, so if you are typing 'cat Doggurments.txt' You can instead do 'cat Dogg' and press Tab to make it automatically type the rest out for you! If you want EVEN MORE tricks you know what to type next!"
+        case 8:
+            return "Well, well, well. Guess whos back. You want more tricks? Well hows this for a trick? You can type 'cowsay \"Put some text here\"' to get some ascii of a cow saying what you input. Another trick, if you want some big text you can do 'figlet \"Insert some cool text\"' and finally you can do 'echo' to repeat back what you input!"
+        case 9:
+            return "Bro what you doing here, that's all that there was too it!"
         default:
             return "Sorry, either that is not a valid number of the number that you have entered is not a valid page number. Please try again with a diffrent number.";
     }
@@ -132,6 +228,60 @@ const commands = {
             term.echo(files.join(', '));
         }
     },
+    async sql(args){
+        const file = args.trim();
+        let dir = directoryStructure;
+        for (const part of currentPath) {
+            dir = dir[part];
+        }
+        await sleep(100);
+        if (dir[file]) {
+            if (Array.isArray(dir[file]) && dir[file][0] === "sql") {
+                const [type, content, sqlData] = dir[file];
+                term.echo(`[[;${hex({ red: 0, green: 255, blue: 0 })};]10 rows in set (0.23s):]\n${sqlData}`)
+                await startTheFinale(); // Hi
+            }
+            else {
+                term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} is not a valid SQL file.]`);
+            }
+        }
+        else {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} does not exist in ${currentPath[currentPath.length - 1]}.]`);
+        }
+    },
+    async fuff(args) {
+        if (!fuffInstalled) {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Command fuff Not Found!]`);
+            return;
+        }
+
+        const website = args.trim();
+        console.log("Website to scan:", website);
+
+        if (!website) {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide a website to scan.]`);
+            return;
+        }
+
+        if(!website.startsWith("http://") && !website.startsWith("https://")) {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]A website must start with http:// or https://]`);
+            return;
+        }
+
+        if(website !== "http://localhost" && website !== "https://hacker.flik.host"){
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Hmmm that website can't be accessed right now... (Maybe try the website your on right now.)`);
+            return;
+        }
+
+        term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]Starting scan on ${website} using default wordlist...]`);
+        await randSleep(700, 2400);
+        term.echo(`[[;${hex({ red: 0, green: 255, blue: 0 })};]Scan complete! Found the following webpagse and directories:]`);
+        await randSleep(500, 1500);
+        term.echo(`[[;${hex({ red: 255, green: 255, blue: 255 })};]1. /index.html\n2. /abouthacking.html\n3. /games.html\n4. /hackergame.html\n5. /hackerlevel.html\n6. /resources.html\n[[;${hex({ red: 0, green: 255, blue: 0 })};]7. /userinfo.html[[;${hex({ red: 255, green: 255, blue: 255 })};]\n8. /games/directAccess\n9. /games/flashcards.html\n10. /games/memory.html\n11. /games/quest.html\n12. /games/shell.html]`)
+        await sleep(1200);
+        term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]I think its a good idea you check out ${window.location.protocol + "//"  + window.location.host + "/userinfo.html"}]`);
+
+    },
     async cd(args){
         const targetDirectory = args.trim();
         let dir = directoryStructure;
@@ -158,8 +308,6 @@ const commands = {
         term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]Attempting to login...]`);
         
         const login_result = await getValidationKey(password);
-
-        console.log("Login result:", login_result);
 
         await sleep(1000);
 
@@ -290,7 +438,7 @@ function tabCompletion(string, callback) {
         return;
     }
     
-    const fileCommands = ['cat', 'w3m', 'cd'];
+    const fileCommands = ['cat', 'w3m', 'cd', 'sql'];
     const commandName = args[0].toLowerCase();
     
     if (fileCommands.includes(commandName)) {
