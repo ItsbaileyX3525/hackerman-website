@@ -168,15 +168,9 @@ document.addEventListener('keydown', function (event) {
 let currentLevel = parseInt(localStorage.getItem('currentLevel'), 10) || 0;
 let storedPassword = localStorage.getItem('storedPassword') || '';
 
-if(currentLevel == 0) {
-    loadLevel('password');
-}else{
-    console.log(storedPassword)
-    loadLevel(storedPassword);
-    firstLoad = false;
-    loadedData = true;
-    canCorrect = false;
-}
+
+loadLevel('password');
+
 
 document.addEventListener('keydown', function (event) {
     if (event.key === 'Alt' && !loadedSomeReturns) {
