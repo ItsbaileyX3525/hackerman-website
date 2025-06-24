@@ -18,14 +18,14 @@ const directoryStructure = {
             }
         },
         "pictures": {
-            "Phillip.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/4pI7kb.png"],
+            //"Phillip.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/4pI7kb.png"],
             "Bailey.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/4Zh5i.jpg"],
-            "Joshua.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/2WqAyW.jpg"],
+            //"Joshua.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/2WqAyW.jpg"],
             "Shlexter.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/3fkyJ8.jpg"],
-            "Daniel.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/36y3tM.png"],
-            "Leland.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://cdn.discordapp.com/avatars/1336861687432872090/30c6f498c0a65f247f63cc8df67959cd?size=1024"],
-            "God.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/32qt5W.png"],
-            "Devil.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/4pI7kb.png"],
+            //"Daniel.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/36y3tM.png"],
+            //"Leland.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://cdn.discordapp.com/avatars/1336861687432872090/30c6f498c0a65f247f63cc8df67959cd?size=1024"],
+            //"God.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/32qt5W.png"],
+            //"Devil.png": ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://flik.host/images/4pI7kb.png"],
         },
         "music": {
             "DrumsOfLiberation.mp3" : ["audio", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat audio)"], "https://bailey.flik.host/assets/sounds/drums%20of%20liberation.mp3"],
