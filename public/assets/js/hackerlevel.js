@@ -165,12 +165,11 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
-let currentLevel = parseInt(localStorage.getItem('currentLevel'), 10) || 0;
+//let currentLevel = parseInt(localStorage.getItem('currentLevel'), 10) || 0;
+let currentLevel = 0
 let storedPassword = localStorage.getItem('storedPassword') || '';
 
-
 loadLevel('password');
-
 
 document.addEventListener('keydown', function (event) {
     if (event.key === 'Alt' && !loadedSomeReturns) {
