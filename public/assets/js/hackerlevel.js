@@ -165,6 +165,9 @@ document.addEventListener('keydown', function (event) {
     }
 });
 
+//Fix old level loading thing
+localStorage.clear();
+
 //let currentLevel = parseInt(localStorage.getItem('currentLevel'), 10) || 0;
 let currentLevel = 0
 let storedPassword = localStorage.getItem('storedPassword') || '';
@@ -176,4 +179,3 @@ document.addEventListener('keydown', function (event) {
         appendMeSomeReturns();
     }
 });
-

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/assets/css/hackle.css">
+    <title>Hackle</title>
+</head>
+<body>
+    <div class="wordle-container">
+        <h1>Hackle</h1>
+        <div class="instructions">
+            Guess the <b>5-letter word</b> in 6 tries.<br>
+            Each guess must be a valid 5-letter word.<br>
+            After each guess, the color of the tiles will change to show how close your guess was.
+            <a style="color: salmon" href="wordList.html">Click here to see a list of valid words!</a>
+        </div>
+        <div id="guessesGrid" class="guesses-grid"></div>
+        <div id="feedback"></div>
+        <div id="attempts">Attempts: 0/6</div>
+        
+        <div class="keyboard">
+            <div class="keyboard-row" id="row1"></div>
+            <div class="keyboard-row" id="row2"></div>
+            <div class="keyboard-row" id="row3"></div>
+        </div>
+        
+        <div style="display: flex; margin-top: 20px;">
+            <a href="menu" class="back-button">Menu</a>
+            <a href="wordle" class="back-button">Restart</a>
+        </div>
+    </div>
+    <script src="/assets/js/hackle.js"></script>
+</body>
+</html>

@@ -11,9 +11,31 @@ const directoryStructure = {
             "OfficePartyInvite.txt": ["txt", "Hi Dan,\n\nYou are invited to the office party that is taking place on the 23rd of Jan. Please be there or else we will take that as you not wanting to be invited to any future parties. \n\nMany thanks, \nPhilton and all the others!"]
         },
         "downloads": {
-            "maxwell.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/silly-cat/images/d/d5/Maxwell.png/revision/latest?cb=20231001194454"],
+            "maxwell.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/silly-cat/images/d/d5/Maxwell.png"],
+            "soggaPics" : {
+                "sogga.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/1/1d/Soggaglopnar.jpg"],
+                "Mt_Googas.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/6/6c/Obraz_2021-02-15_135626.webp"],
+                "infant.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/3/32/Download_%2879%29.webp"],
+                "child.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/e/e8/Obraz_2021-02-15_135313.webp"],
+                "snoozin.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/6/61/Partysog.webp"],
+                "imStillStandin.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/6/6a/Sogger.webp"],
+                "chillin.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/e/ea/Download_%2880%29.webp"],
+            },
+            "floppaPics" : {
+                "floppa.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/9/96/Floppa.jpg"],
+                "hissin.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/3/38/Angy.png"],
+                "chillin_with_justin.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/f/f3/Big_Floppa_with_his_brother%2C_Justin.jpg"],
+                "rapping.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/7/76/NewHitRapper.jpg"],
+                "holy_moly.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/3/3d/Assa.jpeg"],
+            },
+            "bingusPics" : {
+                "infoOnBingus.txt": ["txt", "Vladimir Bingus. Born on 1969, he ruled as a dictator of the communist Bingustan. Suspected murderer of Chinp Floppa. He is the dio of the floppa bloodline"],
+                "bingus.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/5/5f/ActualBingus.jpg"],
+                "sportingSomeDrip.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/3/39/Bingbingdrip.jpg"],
+                "suitedUp.png" : ["img", ["erufhuerfhoiPNGueihdiewuhfuihfu21uh324f378fh7... (Dont cat images)"], "https://static.wikia.nocookie.net/floppapedia-revamped/images/b/b0/Bingus.jpg"],
+            },
             "Screenshots.7z": ["txt", "This is a 7z file that contains screenshots of the server. Unfortunately, I haven't added support to extract 7z files"],
-            "Databases": {
+            "databases": {
                 "Requires Login, use /login" : ["txt", "bro why you catting this?"]
             }
         },
@@ -52,7 +74,6 @@ const directoryStructure = {
     }
 }
 };
-
 
 const formatter = new Intl.ListFormat('en', {
     style: 'long',
@@ -93,7 +114,7 @@ async function getValidationKey(password) {
 
 		if (data.success) {
             const recievedFiles = data.newStructure
-            directoryStructure.home.downloads.Databases = recievedFiles	
+            directoryStructure.home.downloads.databases = recievedFiles	
 			return { success: true, validationkey: data.validationkey };	
         }
 
@@ -175,7 +196,7 @@ async function startTheFinale() {
 	term.echo(' installing ffuf...');
 	await randSleep(900, 1700);
 	term.echo('[[;#00ff00;]ffuf installation complete.]');
-    term.echo(`[[;${hex(returnSomeRgb(5, 243, 247))};]Awesome! You can now use the ffuf command to scan the webpages on this site for any hidden webpages. Try it out!]`);
+    term.echo(`[[;${hex(returnSomeRgb(5, 243, 247))};]Awesome! You can now use the ffuf command to scan the webpages on this site for any hidden webpages. Try it out! (Use 'ffuf' and then the website name you want to search, for example 'ffuf https://google.com')]`);
     fuffInstalled = true;
 }
 
@@ -228,7 +249,11 @@ const commands = {
             term.echo(files.join(', '));
         }
     },
-    async sql(args){
+    async sql(args="None"){
+        if (args === "None") {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide a database file to read.]`);
+            return;
+        }
         const file = args.trim();
         let dir = directoryStructure;
         for (const part of currentPath) {
@@ -249,12 +274,16 @@ const commands = {
             term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} does not exist in ${currentPath[currentPath.length - 1]}.]`);
         }
     },
-    async ffuf(args) {
+    async ffuf(args="None"){
+
         if (!fuffInstalled) {
             term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Command fuff Not Found!]`);
             return;
         }
-
+        if (args === "None") {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide a file name to read.]`);
+            return;
+        }
         const website = args.trim();
         console.log("Website to scan:", website);
 
@@ -282,7 +311,11 @@ const commands = {
         term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]I think its a good idea you check out ${window.location.protocol + "//"  + window.location.host + "/userinfo.html"}]`);
 
     },
-    async cd(args){
+    async cd(args="None"){
+        if (args === "None") {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide a directory to cd into.]`);
+            return;
+        }
         const targetDirectory = args.trim();
         let dir = directoryStructure;
         for (const part of currentPath) {
@@ -304,7 +337,11 @@ const commands = {
             term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Directory ${targetDirectory} does not exist in ${currentPath[currentPath.length - 1]}.]`);
         }
     },
-    async login(password){
+    async login(password="None"){
+        if (password === "None") {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide a password.]`);
+            return;
+        }
         term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]Attempting to login...]`);
         
         const login_result = await getValidationKey(password);
@@ -323,7 +360,11 @@ const commands = {
     test(){
         term.echo("What you testing?")
     },
-    async w3m(args){
+    async w3m(args="None"){
+        if (args === "None") {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide an image name to display.]`);
+            return;
+        }
         const file = args.trim();
         let dir = directoryStructure;
         for (const part of currentPath) {
@@ -347,7 +388,11 @@ const commands = {
             }
         }
     },
-    async cat(args){
+    async cat(args="None"){
+        if (args === "None") {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide a file name to read.]`);
+            return;
+        }
         const file = args.trim();
         let dir = directoryStructure;
         for (const part of currentPath) {
@@ -369,10 +414,10 @@ const commands = {
     help() {
         term.echo(`List of available commands: ${help}`);
     },
-    echo(args){
+    echo(args="No input"){
         term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]${args}]`);
     },
-    async cowsay(args){
+    async cowsay(args="No input"){
         const proxyUrl = "https://corsproxy.io/?";
         const apiUrl = "https://cowsay.morecode.org/say?message=" + encodeURIComponent(args)+"&format=json";
         try {
@@ -391,18 +436,21 @@ const commands = {
             term.echo("[[;#FF0000;]Error fetching cowsay output: " + error.message + "]");
         }
     },
-    async kanye(){
-        await fetch("https://api.kanye.rest/")
-        .then(response => response.json())
-        .then(data => term.echo(data.quote))
-        .catch(error => console.error("Error fetching data:", error));
-      
+    async kanye(potentialArgs = ""){
+        if (potentialArgs.trim() !== "--Force-Enable") {
+            term.echo("[[;#FF0000;]Due to Kanye being a bit controversial, this command has been disabled. However if you REALLY want to see some kanye quotes, do the command 'kayne --Force-Enable']");
+        }else {
+            await fetch("https://api.kanye.rest/")
+            .then(response => response.json())
+            .then(data => term.echo(data.quote))
+            .catch(error => console.error("Error fetching data:", error));
+        }
     },
-    lolcat(args){
+    lolcat(args="No input"){
         const message = rainbow(args);
         term.echo(message);
     },
-    async figlet(args){
+    async figlet(args="No input"){
         await figlet.text(args, { font: 'big' }, function(err, data) {
             if (err) {
                 console.log('Something went wrong...');
