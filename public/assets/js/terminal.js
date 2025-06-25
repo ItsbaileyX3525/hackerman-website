@@ -1,6 +1,7 @@
 let validationKey = "";
 let currentPath = ["home"];
 let fuffInstalled = false;
+let command_break = false;
 
 const directoryStructure = {
     home: {
@@ -227,12 +228,73 @@ function loadHelp(page){
     }
 }
 
+var asciiArts = {
+    "donut" : DonutFrames,
+    "parrot" : ParrotFrames,
+    "nyan" : NyanFrames,
+    "knot" : KnotFrames,
+    "earth" : EarthFrames,
+    "maxwell" : MaxwellFrames,
+}
+
+const validAscii = ["nyan", "donut", "parrot", "knot", "earth", "maxwell"];
+
 const commands = {
     begin_hack(args = "0") {
         const pageStr = String(args).trim();
         const page = parseInt(pageStr, 10);
         const helpText = loadHelp(page);
         term.echo(`[[;${hex({ red: 0, green: 255, blue: 0 })};]Page ${page} loaded:]\n${helpText}`);
+    },
+    ascii(args = "none") {
+        if(args === "none") {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide an ASCII art name and use --rainbow to enable rainbow mode if you want ('ascii "nyan --rainbow"').]`);
+            term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]Available ASCII art names: ${validAscii.join(', ')}]`);
+            return;
+        }
+
+        const allArgs = args.split(" ");
+        const artName = allArgs[0];
+        const useRainbow = allArgs[1] === "--rainbow";
+
+        if (!validAscii.includes(artName)) {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Invalid ASCII art name. Available options are: ${validAscii.join(', ')}.]`);
+            return;
+        }
+
+        const frames = asciiArts[artName];
+        let iteration = 0;
+        let frameIndex = 0;
+
+        function showNextFrame() {
+            if (command_break || iteration >= 1000) {
+                command_break = false;
+                return;
+            }
+
+            term.clear();
+            const frame = frames[frameIndex];
+            term.echo(useRainbow ? rainbow(frame)+"\nUse 'exit' to stop the animation." : frame+"\nUse 'exit' to stop the animation.");
+
+            frameIndex++;
+
+            if (frameIndex >= frames.length) {
+                frameIndex = 0;
+                iteration++;
+            }
+
+            setTimeout(showNextFrame, 50);
+        }
+
+        term.clear();
+        showNextFrame();
+    },
+    exit(){
+        command_break = true;
+        console.log("Exiting command");
+        setTimeout(() => {
+            command_break = false;
+        }, 50);
     },
     async ls(){
         let dir = directoryStructure;
@@ -360,6 +422,9 @@ const commands = {
     test(){
         term.echo("What you testing?")
     },
+    changelog(){
+        term.echo("Changeshlawg:\n\nHi, I have no changelogs atm")
+    },
     async w3m(args="None"){
         if (args === "None") {
             term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]Please provide an image name to display.]`);
@@ -370,22 +435,23 @@ const commands = {
         for (const part of currentPath) {
             dir = dir[part];
         }
-        term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]Opening file ${file}...]`);
-        await sleep(100);
         if (dir[file]) {
+            term.echo(`[[;${hex({ red: 255, green: 165, blue: 0 })};]Opening file ${file}...]`);
+            await sleep(100);
             if (Array.isArray(dir[file])) {
                 const [type, content, url] = dir[file];
-               if (type === "img") {
+                if (type === "img") {
                     console.log("Image URL:", url);
                     term.echo(`[[;${hex({ red: 0, green: 255, blue: 0 })};]Image ${file} loaded:]`);
                     term.echo(`[[@;;;;${url}]]`);
-
                 } else {
-                term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} is not readable.]`);
+                    term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} is not readable.]`);
                 }
             } else {
                 term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} does not exist in ${currentPath[currentPath.length - 1]}.]`);
             }
+        } else {
+            term.echo(`[[;${hex({ red: 255, green: 0, blue: 0 })};]File ${file} does not exist in ${currentPath[currentPath.length - 1]}.]`);
         }
     },
     async cat(args="None"){

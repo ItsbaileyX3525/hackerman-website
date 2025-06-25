@@ -189,7 +189,7 @@ app.post('/submit', (req, res) => {
 				return res.json({ level: '6', content: sendLevel6()[0] });
 			}
 			else {
-				return res.json({ error: true, content: `Password is incorrect!`, redirect: { url: "/hackerlevel.html?password=vwKPydUFJMzF", delay: 500 } });
+				return res.json({ error: true, content: `Password is incorrect!`, pwd: "vwKPydUFJMzF" });
 			}
 		case 6:
 			if (password === '2009-2012') {

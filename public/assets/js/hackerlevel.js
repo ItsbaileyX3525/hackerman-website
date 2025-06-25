@@ -94,8 +94,10 @@ async function loadLevel(password) {
             if (responseData.js) {
                 eval(responseData.js);
             }
-            if (responseData.redirect) {
-                window.location.href = responseData.redirect.url;
+            if (responseData.pwd) {
+                const url = new URL(window.location);
+                url.searchParams.set('password', responseData.pwd);
+                history.replaceState({}, '', url);
             }
             return;
         }
@@ -116,13 +118,6 @@ async function loadLevel(password) {
                 showNotification("Password accepted!", 'success');
             }
         }
-        
-        if(loadedData) {
-            loadedData = false;
-            if(!window.location.href.includes("?password=")){
-                showNotification("Loaded saved level!", 'info');
-            }
-        }
 
         if(responseData.js){
             eval(responseData.js);
@@ -132,12 +127,10 @@ async function loadLevel(password) {
             canCorrect = true;
         }
 
-        // Clear URL parameter after successful level load (except for level 5)
         if(currentLevel !== 5 && window.location.href.includes("?password=")){
             window.history.replaceState({}, document.title, "/hackerlevel.html");
         }
 
-        // Remove the event listeners from here - they should only be added once
 
     } catch (error) {
         console.error('There has been a problem with your fetch operation:', error);

@@ -8,7 +8,7 @@ const wordList = [
 
 const MAX_ATTEMPTS = 6;
 const WORD_LENGTH = 5;
-let secretWord = "";
+let wuweqghhwdyghweyfgywegf = "";
 let currentAttempt = 0;
 let currentGuess = [];
 let guessHistory = [];
@@ -32,8 +32,8 @@ const keyboard = [
 const keyState = {};
 
 function initGame() {
-    secretWord = wordList[Math.floor(Math.random() * wordList.length)].toLowerCase();
-    console.log("Secret word (for debugging):", secretWord);
+    wuweqghhwdyghweyfgywegf = wordList[Math.floor(Math.random() * wordList.length)].toLowerCase();
+    console.log("Secret word (for debugging):", wuweqghhwdyghweyfgywegf);
     
     createGrid();
     
@@ -128,7 +128,7 @@ function handleKey(key) {
 
 function getFeedback(guess) {
     const result = Array(WORD_LENGTH).fill('absent');
-    const secretLetters = secretWord.split('');
+    const secretLetters = wuweqghhwdyghweyfgywegf.split('');
     const guessLetters = guess.split('');
     
     for (let i = 0; i < WORD_LENGTH; i++) {
@@ -191,7 +191,12 @@ function applyFeedback(feedback) {
 async function submitGuess() {
     const guess = currentGuess.join('');
     
-    if (!wordList.includes(guess) && guess !== secretWord) {
+    if (guess === "nigga"){
+        window.location.href = "racistDetected.html";
+        return;
+    }
+
+    if (!wordList.includes(guess) && guess !== wuweqghhwdyghweyfgywegf) {
         feedbackDiv.innerText = "Not in word list";
         setTimeout(() => {
             feedbackDiv.innerText = "";
@@ -206,12 +211,13 @@ async function submitGuess() {
     const feedback = getFeedback(guess);
     
     await applyFeedback(feedback);
+
     
-    if (guess === secretWord) {
-        feedbackDiv.innerHTML = `🎉 You got it! The word was <b>${secretWord.toUpperCase()}</b>`;
+    if (guess === wuweqghhwdyghweyfgywegf) {
+        feedbackDiv.innerHTML = `🎉 You got it! The word was <b>${wuweqghhwdyghweyfgywegf.toUpperCase()}</b>`;
         gameOver = true;
     } else if (currentAttempt >= MAX_ATTEMPTS) {
-        feedbackDiv.innerHTML = `😢 Out of tries! The word was <b>${secretWord.toUpperCase()}</b>`;
+        feedbackDiv.innerHTML = `😢 Out of tries! The word was <b>${wuweqghhwdyghweyfgywegf.toUpperCase()}</b>`;
         gameOver = true;
     }
     
