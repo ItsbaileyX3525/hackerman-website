@@ -106,6 +106,11 @@ function updateCell(row, col, letter) {
 function handleKeyPress(e) {
     if (gameOver) return;
     
+    // Prevent default behavior for Enter key to avoid form submission
+    if (e.key === 'Enter') {
+        e.preventDefault();
+    }
+    
     const key = e.key;
     handleKey(key);
 }

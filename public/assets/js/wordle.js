@@ -97,6 +97,11 @@ function updateCell(row, col, letter) {
 function handleKeyPress(e) {
     if (gameOver) return;
     
+    // Prevent default behavior for Enter key to avoid form submission
+    if (e.key === 'Enter') {
+        e.preventDefault();
+    }
+    
     const key = e.key;
     handleKey(key);
 }
@@ -182,11 +187,6 @@ function applyFeedback(feedback) {
 
 async function submitGuess() {
     const guess = currentGuess.join('');
-    
-    if (guess === "nigga"){
-        window.location.href = "racistDetected.html";
-        return;
-    }
 
     if (!wordList.includes(guess) && guess !== wuweqghhwdyghweyfgywegf) {
         feedbackDiv.innerText = "Not in word list";
