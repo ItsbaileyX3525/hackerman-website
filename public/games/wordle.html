@@ -8,12 +8,11 @@
 </head>
 <body>
     <div class="wordle-container">
-        <h1>Hackle</h1>
+        <h1>Wordle</h1>
         <div class="instructions">
             Guess the <b>5-letter word</b> in 6 tries.<br>
+            Each guess must be a valid 5-letter word.<br>
             After each guess, the color of the tiles will change to show how close your guess was.
-            <a style="color: salmon" href="wordList.html">Click here to see a list of valid words!</a>
-            <br>Want to play normal wordle with just normal words? <a style="color: salmon" href="wordle.html">Click here</a>
         </div>
         <div id="guessesGrid" class="guesses-grid"></div>
         <div id="feedback"></div>
@@ -26,10 +25,11 @@
         </div>
         
         <div style="display: flex; margin-top: 20px;">
-            <a href="/games.html" class="back-button">Menu</a>
-            <a href="hackle.html" class="back-button">Restart</a>
+            <a href="menu" class="back-button">Menu</a>
+            <a href="wordle" class="back-button">Restart</a>
         </div>
     </div>
-    <script src="/assets/js/hackle.js"></script>
+    <script src="/assets/js/wordList.js"></script>
+    <script src="/assets/js/wordle.js"></script>
 </body>
 </html>

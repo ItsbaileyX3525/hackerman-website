@@ -84,7 +84,7 @@ function sendLevel5(){
             <div id="submit" tabindex="0">Submit</div><br>
 			<p>Websites often send passwords through POST and GET, POST is just a secure way to send a password to the server, GET is an insecure way and sometimes websites mess up and use GET requests incorrectly, displaying the password is the url bar. GET requests are sent when you <text-data style="font-weight: bold">SUBMIT</text-data> the data</p>
 			<p id="hint" style="color: transparent;">Press the submit button and check the url at the top!</p>
-        </div>`, ``];
+        </div>`, `vwKPydUFJMzF`];
 }
 
 function sendLevel6(){
@@ -168,7 +168,7 @@ app.post('/submit', (req, res) => {
 				return res.json({ error: true, content: `Password is incorrect!` });
 			}
 		case 3:
-			if (password === 'G0q77>a50TkG' || password == '"G0q77>a50TkG"') {
+			if (password === 'G0q77>a50TkG' || password == '"G0q77>a50TkG"' || password == "'G0q77>a50TkG'") {
 				const data = sendLevel4();
 				const htmlData = data[0];
 				const jsData = data[1];

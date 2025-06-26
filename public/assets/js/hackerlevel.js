@@ -15,20 +15,7 @@ let firstLoad = true;
 let loadedData = false;
 let canCorrect = true;
 let loadedSomeReturns = false;
-
-function appendMeSomeReturns(){
-    loadedSomeReturns = true;
-    const gameDiv = document.getElementById('flex-item');
-    const p = document.createElement('p');
-    p.innerHTML = `
-    <div style="text-align: center; margin-top: 20px;">
-        <button onclick='localStorage.clear();window.location.reload();' id="return-button" style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Clear some cookies</button>
-    </div>
-    `;
-    p.style.textAlign = 'center';
-    gameDiv.appendChild(p);
-
-}
+let skipLevelPassword = "";
 
 function loadSomeDevs(){
     console.log("Loading some devs...");
@@ -95,6 +82,7 @@ async function loadLevel(password) {
                 eval(responseData.js);
             }
             if (responseData.pwd) {
+                skipLevelPassword = responseData.pwd;
                 const url = new URL(window.location);
                 url.searchParams.set('password', responseData.pwd);
                 history.replaceState({}, '', url);
@@ -168,7 +156,16 @@ let storedPassword = localStorage.getItem('storedPassword') || '';
 loadLevel('password');
 
 document.addEventListener('keydown', function (event) {
-    if (event.key === 'Alt' && !loadedSomeReturns) {
-        appendMeSomeReturns();
+    if (event.key === "Alt" && event.shiftKey) {
+        console.log("Shift pressed + Alt");
+        const gameDiv = document.getElementById('flex-item');
+        const p = document.createElement('p');
+        p.innerHTML = `
+        <div style="text-align: center; margin-top: 20px;">
+            <p>The password for this level is: ${skipLevelPassword || "Not found :P"}</p>
+        </div>
+        `;
+        p.style.textAlign = 'center';
+        gameDiv.appendChild(p);
     }
-});
+})

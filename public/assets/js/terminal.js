@@ -3,6 +3,9 @@ let currentPath = ["home"];
 let fuffInstalled = false;
 let command_break = false;
 
+let testCommandCheckIfItsWorking = false; 
+let ifTheTestCommandIsWorking = false;
+
 const directoryStructure = {
     home: {
         "documents": {

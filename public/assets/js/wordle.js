@@ -1,12 +1,3 @@
-const wordList = [
-    "cyber", "proxy", "virus", "phish", "crack", "admin", "shell", "token", "input", "bytes",
-    "login", "patch", "spoof", "trace", "logic", "brute", "snoop", "wormy", "stack", "sniff",
-    "spook", "recon", "leaks", "crypt", "alert", "audit", "block", "cloud", "debug", "drain",
-    "grant", "guard", "intel", "macro", "miner", "nonce", "probe", "reset", "scrub", "steal",
-    "swarm", "track", "vault", "whale", "salts", "pwned", "admin", "crash", "dumps", "flood",
-
-];
-
 const MAX_ATTEMPTS = 6;
 const WORD_LENGTH = 5;
 let wuweqghhwdyghweyfgywegf = "";

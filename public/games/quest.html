@@ -79,7 +79,7 @@ function loadQuestion(index) {
         if (!response.ok) {
             // Game completed!
             document.querySelector('.question').textContent = "Congratulations! Quest Complete!";
-            document.querySelector('.choices').innerHTML = '<button onclick="window.location.href=\'/games/\'" style="font-size: 1.2rem; padding: 20px 40px;">Return to Games</button>';
+            document.querySelector('.choices').innerHTML = '<button onclick="window.location.href=\'/games.html\'" style="font-size: 1.2rem; padding: 20px 40px;">Return to Games</button>';
             return;
         }
         return response.json();
