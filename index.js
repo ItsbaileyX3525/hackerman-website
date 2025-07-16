@@ -84,6 +84,8 @@ function sendLevel5(){
             <div id="submit" tabindex="0">Submit</div><br>
 			<p>Websites often send passwords through POST and GET, POST is just a secure way to send a password to the server, GET is an insecure way and sometimes websites mess up and use GET requests incorrectly, displaying the password is the url bar. GET requests are sent when you <text-data style="font-weight: bold">SUBMIT</text-data> the data</p>
 			<p id="hint" style="color: transparent;">Press the submit button and check the url at the top!</p>
+			<p>Level 5 not working?</p>
+			<button onclick="loadLevel('vwKPydUFJMzF')">Click here to skip to level 6</button>
         </div>`, `vwKPydUFJMzF`];
 }
 
@@ -236,7 +238,7 @@ app.post('/submit', (req, res) => {
 
 app.use('/api', submitRoutes);
 
-const port = 80;
+const port = 3001;
 
 const server = app.listen(port, '0.0.0.0', () => { 
 	console.log(`Server running on http://0.0.0.0:${port}`);
